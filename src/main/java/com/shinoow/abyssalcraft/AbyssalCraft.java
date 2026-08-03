@@ -11,12 +11,15 @@
  ******************************************************************************/
 package com.shinoow.abyssalcraft;
 
+import com.shinoow.abyssalcraft.api.block.ACBlocks;
+import com.shinoow.abyssalcraft.common.util.ACPortSelfCheck;
 import com.shinoow.abyssalcraft.init.ACRegistries;
 import com.shinoow.abyssalcraft.lib.ACConfig;
 import com.shinoow.abyssalcraft.lib.ACConfigSpec;
 import com.shinoow.abyssalcraft.lib.ACTabs;
 
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
@@ -37,10 +40,13 @@ public class AbyssalCraft {
         IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
 
         ACRegistries.register(modBus);
+        ACBlocks.register();
         ACTabs.register();
 
         modBus.addListener(ACConfig::onConfigLoad);
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, ACConfigSpec.SPEC);
+
+        MinecraftForge.EVENT_BUS.addListener(ACPortSelfCheck::onServerStarted);
     }
 
     /** Replaces the 1.12.2 {@code @SidedProxy} split. */
