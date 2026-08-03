@@ -133,14 +133,41 @@ dependency graph: nothing compiles until registries and the mod entrypoint exist
 
 ## Progress so far
 
-- Forge 47.3.12 / MC 1.20.1 / Java 17 toolchain scaffolding in `build.gradle`,
-  `settings.gradle`, `gradle.properties` (Gradle 8.1.1 wrapper).
-- Fixed: Gradle 8.1.1 cannot parse JDK 21 class files (`major version 65`) and
-  `JAVA_HOME` on this machine is JDK 21. Pinned `org.gradle.java.home` to the
-  auto-provisioned Temurin 17.
-- Verified: `./gradlew :extractSrg` **succeeds** (5m39s) — MCP config downloads
-  and official mappings resolve. Toolchain is sound.
-- Source tree is still 100% 1.12.2. No Java migrated.
+**Phase 00 — toolchain + entrypoint: DONE (verified).**
+- ForgeGradle 6 / MC 1.20.1 / Forge 47.3.12 / Java 17, Gradle 8.1.1 wrapper.
+- Fixed: Gradle 8.1.1 cannot parse JDK 21 class files (`major version 65`) while
+  `JAVA_HOME` is JDK 21. Gradle pinned to Temurin 17 via the user-level
+  `~/.gradle/gradle.properties` (not committed — it is machine-specific).
+- `mcmod.info` → `mods.toml`; `pack_format` 1 → 15; logo moved to pack root.
+- All 8 locales converted from `.lang` to JSON (1426 keys each).
+- Mod entrypoint rewritten from `@Mod(modid=…)`/`@SidedProxy`/`@EventHandler`
+  to the constructor + mod event bus.
+- **Gate met:** dedicated server reaches `Done (51.580s)!` with the mod loaded.
+
+**Phase 01 — config + tabs + registries: DONE (verified).**
+- All 148 config options ported from the removed `Configuration` class to
+  `ForgeConfigSpec`. `ACConfig` keeps the same static fields, so the ~138 read
+  sites need no changes.
+- Dropped the 4 numeric dimension-ID options (1.20.1 keys dimensions by
+  `ResourceKey`); the 2 dimension blacklists became string lists for the same
+  reason.
+- Creative tabs → `CreativeModeTab` registry entries, reusing `itemGroup.*` keys.
+- 12 central `DeferredRegister` instances.
+- **Gate met:** `abyssalcraft-common.toml` generates with all categories intact.
+
+**Phase 02 — blocks: PARTIAL (55 of ~151 registered, verified).**
+- Stone family (8), cobblestone family (5), brick families (17), ores (14),
+  terrain (9), pillars/glowing (3) — each metadata variant now its own block.
+- `ACPortSelfCheck` asserts every declared block resolves in the live registry
+  with an item form, and runs on every server start.
+- **Gate met:** self-check reports `all 55 registered blocks resolved`.
+- **Remaining in this phase:** ~96 blocks — slabs/stairs/walls/fences, portals,
+  fires, machines, altars, statues, energy blocks, plants, doors, crates.
+  These depend on later phases (block entities, menus) and are blocked until
+  those land.
+
+**Not started:** phases 03–17. The Java tree is otherwise still 1.12.2 and lives
+uncompiled in `src/legacy/` (also preserved on the `legacy-1.12.2` branch).
 
 ## Unresolved questions
 
