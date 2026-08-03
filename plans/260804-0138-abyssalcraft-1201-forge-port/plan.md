@@ -103,6 +103,17 @@ dependency graph: nothing compiles until registries and the mod entrypoint exist
 | 16 | JEI integration; drop dead Thaumcraft/InvTweaks stubs | ~20 | JEI shows AC recipes |
 | 17 | Full playthrough validation against feature list above | — | progression completable |
 
+## Decisions (confirmed 2026-08-04)
+
+1. **Ship target: `SalyyS1/AbyssalCraft` (your fork).** Nothing is posted to
+   upstream `Shinoow/AbyssalCraft`.
+2. **Delivery: complete the whole port** ("hoàn thiện toàn bộ"). Work the phases
+   in order; every phase must compile before the next begins.
+3. **Keep Thaumcraft + InvTweaks integration shims** rather than deleting them.
+4. **Accept world-save incompatibility** with 1.12.2 — metadata-packed blocks
+   become `BlockState` properties, which necessarily changes block IDs.
+5. **ProjectE** stays pinned to CurseForge file `4901949`.
+
 ## Decisions needed before implementation
 
 1. **Where does this ship?** `gh` resolves this checkout to
@@ -133,8 +144,4 @@ dependency graph: nothing compiles until registries and the mod entrypoint exist
 
 ## Unresolved questions
 
-1. Ship target: your fork `SalyyS1/AbyssalCraft` or upstream `Shinoow/AbyssalCraft`?
-2. Drop Thaumcraft + InvTweaks integrations?
-3. Accept that 1.12.2 worlds will not load on the ported build?
-4. Do you want the phases delivered incrementally (phase 00–02 first, reviewed,
-   then continue), or a long-running multi-session effort tracked in this plan?
+- None. All four open questions were resolved above on 2026-08-04.

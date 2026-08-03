@@ -11,83 +11,51 @@
  ******************************************************************************/
 package com.shinoow.abyssalcraft.lib;
 
-import com.shinoow.abyssalcraft.api.block.ACBlocks;
-import com.shinoow.abyssalcraft.api.item.ACItems;
+import java.util.function.Supplier;
 
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
+import com.shinoow.abyssalcraft.init.ACRegistries;
+
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraftforge.registries.RegistryObject;
 
 /**
- * Creative Tab references
- * @author shinoow
+ * Creative Tab references.
+ * <p>
+ * {@code CreativeTabs} was a class you subclassed on 1.12.2; on 1.20.1 tabs are registry entries
+ * built through {@link CreativeModeTab#builder()}. Tab identifiers are unchanged so the existing
+ * {@code itemGroup.*} lang keys still apply, and contents are filled in by the block/item phases.
  */
 public class ACTabs {
 
-	public static void init(){ /* Nothing special here, just initializing all the static things */}
+    public static final RegistryObject<CreativeModeTab> tabBlock =
+            tab("acblocks", () -> new ItemStack(Items.STONE));
+    public static final RegistryObject<CreativeModeTab> tabItems =
+            tab("acitems", () -> new ItemStack(Items.BOOK));
+    public static final RegistryObject<CreativeModeTab> tabTools =
+            tab("actools", () -> new ItemStack(Items.STONE_AXE));
+    public static final RegistryObject<CreativeModeTab> tabCombat =
+            tab("acctools", () -> new ItemStack(Items.STONE_SWORD));
+    public static final RegistryObject<CreativeModeTab> tabFood =
+            tab("acfood", () -> new ItemStack(Items.APPLE));
+    public static final RegistryObject<CreativeModeTab> tabDecoration =
+            tab("acdblocks", () -> new ItemStack(Items.STONE_BRICKS));
+    public static final RegistryObject<CreativeModeTab> tabCrystals =
+            tab("accrystals", () -> new ItemStack(Items.QUARTZ));
+    public static final RegistryObject<CreativeModeTab> tabCoins =
+            tab("accoins", () -> new ItemStack(Items.GOLD_NUGGET));
+    public static final RegistryObject<CreativeModeTab> tabSpells =
+            tab("acspells", () -> new ItemStack(Items.PAPER));
 
-	public static final CreativeTabs tabBlock = new CreativeTabs("acblocks"){
+    private static RegistryObject<CreativeModeTab> tab(String name, Supplier<ItemStack> icon) {
+        return ACRegistries.CREATIVE_TABS.register(name, () -> CreativeModeTab.builder()
+                .title(Component.translatable("itemGroup." + name))
+                .icon(icon)
+                .build());
+    }
 
-		@Override
-		public ItemStack createIcon() {
-			return new ItemStack(Item.getItemFromBlock(ACBlocks.stone));
-		}
-	};
-	public static final CreativeTabs tabItems = new CreativeTabs("acitems"){
-
-		@Override
-		public ItemStack createIcon() {
-			return new ItemStack(ACItems.necronomicon);
-		}
-	};
-	public static final CreativeTabs tabTools = new CreativeTabs("actools"){
-
-		@Override
-		public ItemStack createIcon() {
-			return new ItemStack(ACItems.darkstone_axe);
-		}
-	};
-	public static final CreativeTabs tabCombat = new CreativeTabs("acctools"){
-
-		@Override
-		public ItemStack createIcon() {
-			return new ItemStack(ACItems.darkstone_sword);
-		}
-	};
-	public static final CreativeTabs tabFood = new CreativeTabs("acfood"){
-
-		@Override
-		public ItemStack createIcon() {
-			return new ItemStack(ACItems.coralium_plagued_flesh_on_a_bone);
-		}
-	};
-	public static final CreativeTabs tabDecoration = new CreativeTabs("acdblocks"){
-
-		@Override
-		public ItemStack createIcon() {
-			return new ItemStack(Item.getItemFromBlock(ACBlocks.wooden_crate));
-		}
-	};
-	public static final CreativeTabs tabCrystals = new CreativeTabs("accrystals"){
-
-		@Override
-		public ItemStack createIcon() {
-			return new ItemStack(Item.getItemFromBlock(ACBlocks.crystallizer_idle));
-		}
-	};
-	public static final CreativeTabs tabCoins = new CreativeTabs("accoins"){
-
-		@Override
-		public ItemStack createIcon() {
-			return new ItemStack(ACItems.coin);
-		}
-	};
-	public static final CreativeTabs tabSpells = new CreativeTabs("acspells") {
-
-		@Override
-		public ItemStack createIcon() {
-
-			return new ItemStack(ACItems.scroll, 1, 3);
-		}
-	};
+    /** Forces class initialisation so the tabs above are handed to the DeferredRegister. */
+    public static void register() {}
 }

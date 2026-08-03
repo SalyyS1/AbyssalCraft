@@ -1,0 +1,47 @@
+modLoader="javafml"
+loaderVersion="[47,)"
+license="LGPL-3.0-only"
+issueTrackerURL="https://github.com/Shinoow/AbyssalCraft/issues"
+
+[[mods]]
+modId="${mod_id}"
+version="${ac_version}"
+displayName="AbyssalCraft"
+updateJSONURL="https://raw.githubusercontent.com/Shinoow/AbyssalCraft/master/version.json"
+displayURL="https://shinoow.github.io/AbyssalCraft/"
+logoFile="logo.png"
+credits="shinoow (coding), Uberorb (textures), DamienDarkside (sounds), PinkMustard (sounds), Funwayguy (sounds, code), Tiktalik (textures), Dylan4ever (textures), Cybercat5555 (models, textures), Seth0067 (textures), Mike-U5 (code)"
+authors="shinoow"
+description='''
+Explore the world of the dead, along with Dark arts and Lovecraftian horrors. Surpass the boundaries of sanity!
+'''
+
+[[dependencies.${mod_id}]]
+    modId="forge"
+    mandatory=true
+    versionRange="[47,)"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.${mod_id}]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[${mc_version}]"
+    ordering="NONE"
+    side="BOTH"
+
+# JEI supplies the recipe-viewer integration in integration/jei. Optional.
+[[dependencies.${mod_id}]]
+    modId="jei"
+    mandatory=false
+    versionRange="[15,)"
+    ordering="AFTER"
+    side="BOTH"
+
+# ProjectE backs the EMC/transmutation integration. Optional.
+[[dependencies.${mod_id}]]
+    modId="projecte"
+    mandatory=false
+    versionRange="[1.0,)"
+    ordering="AFTER"
+    side="BOTH"

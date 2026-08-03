@@ -85,7 +85,7 @@ tasks.named('processResources', ProcessResources).configure {
         mod_id       : mod_id
     ]
     inputs.properties replaceProps
-    filesMatching(['META-INF/mods.toml', 'pack.mcmeta']) { expand replaceProps }
+    filesMatching(['META-INF/mods.toml', 'pack.mcmeta', 'version.properties']) { expand replaceProps }
 }
 
 tasks.named('jar', Jar).configure {

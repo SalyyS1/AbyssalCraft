@@ -11,7 +11,11 @@
  ******************************************************************************/
 package com.shinoow.abyssalcraft.lib;
 
-import net.minecraft.world.DimensionType;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.level.Level;
+
+import com.shinoow.abyssalcraft.AbyssalCraft;
 
 /**
  * This package exposes a bit more internal things without forcing too much of a hard dependency
@@ -19,38 +23,28 @@ import net.minecraft.world.DimensionType;
  */
 public class ACLib {
 
-	//Dimension IDs
-	public static int abyssal_wasteland_id, dreadlands_id, omothol_id, dark_realm_id;
+    /**
+     * Dimension keys. 1.12.2 addressed dimensions by mutable numeric ID; 1.20.1 addresses them by
+     * {@link ResourceKey}, so the four IDs became the four constants below and the corresponding
+     * dimensions are declared as datapack JSON under {@code data/abyssalcraft/dimension}.
+     */
+    public static final ResourceKey<Level> THE_ABYSSAL_WASTELAND =
+            ResourceKey.create(net.minecraft.core.registries.Registries.DIMENSION,
+                    new ResourceLocation(AbyssalCraft.MOD_ID, "the_abyssal_wasteland"));
+    public static final ResourceKey<Level> THE_DREADLANDS =
+            ResourceKey.create(net.minecraft.core.registries.Registries.DIMENSION,
+                    new ResourceLocation(AbyssalCraft.MOD_ID, "the_dreadlands"));
+    public static final ResourceKey<Level> OMOTHOL =
+            ResourceKey.create(net.minecraft.core.registries.Registries.DIMENSION,
+                    new ResourceLocation(AbyssalCraft.MOD_ID, "omothol"));
+    public static final ResourceKey<Level> THE_DARK_REALM =
+            ResourceKey.create(net.minecraft.core.registries.Registries.DIMENSION,
+                    new ResourceLocation(AbyssalCraft.MOD_ID, "the_dark_realm"));
 
-	//Dimension Types
-	public static DimensionType THE_ABYSSAL_WASTELAND, THE_DREADLANDS, OMOTHOL, THE_DARK_REALM;
-
-	//Gui IDs
-	public static final int crystallizerGuiID = 30;
-	public static final int transmutatorGuiID = 31;
-	public static final int engraverGuiID = 32;
-	public static final int necronmiconGuiID = 33;
-	public static final int crystalbagGuiID = 34;
-	public static final int materializerGuiID = 35;
-	public static final int energycontainerGuiID = 36;
-	public static final int necronomiconspellbookGuiID = 37;
-	public static final int rendingPedestalGuiID = 38;
-	public static final int stateTransformerGuiID = 39;
-	public static final int energyDepositionerGuiID = 40;
-	public static final int configuratorGuiID = 41;
-
-	//Crystal stuff
-	public static final String[] crystalNames = new String[]{"Iron", "Gold", "Sulfur", "Carbon", "Oxygen", "Hydrogen", "Nitrogen", "Phosphorus",
-			"Potassium", "Nitrate", "Methane", "Redstone", "Abyssalnite", "Coralium", "Dreadium", "Blaze", "Tin", "Copper",
-			"Silicon", "Magnesium", "Aluminium", "Silica", "Alumina", "Magnesia", "Zinc", "Calcium", "Beryllium", "Beryl"};
-	public static final String[] crystalAtoms = new String[]{"Fe", "Au", "S", "C", "O", "H", "N", "P", "K", "NO\u2083", "CH\u2084", "none", "An",
-			"Cor", "Dr", "none", "Sn", "Cu", "Si", "Mg", "Al", "SiO\u2082", "Al\u2082O\u2083", "MgO", "Zn", "Ca", "Be", "Be\u2083Al\u2082(SiO\u2083)\u2086"};
-
-	/**
-	 * @see ACClientVars#getCrystalColors()
-	 */
-	@Deprecated
-	public static final int[] crystalColors = new int[]{0xD9D9D9, 0xF3CC3E, 0xF6FF00, 0x3D3D36, 16777215, 16777215, 16777215, 0x996A18,
-			0xD9D9D9, 0x1500FF, 0x19FC00, 0xFF0000, 0x4a1c89, 0x00FFEE, 0x880101, 0xFFCC00, 0xD9D8D7, 0xE89207, 0xD9D9D9,
-			0xD9D9D9, 0xD9D9D9, 16777215, 0xD9D8D9, 16777215, 0xD7D8D9, 0xD7D8D9, 0xD9D9D9, 16777215};
+    // Crystal stuff
+    public static final String[] crystalNames = new String[]{"Iron", "Gold", "Sulfur", "Carbon", "Oxygen", "Hydrogen", "Nitrogen", "Phosphorus",
+            "Potassium", "Nitrate", "Methane", "Redstone", "Abyssalnite", "Coralium", "Dreadium", "Blaze", "Tin", "Copper",
+            "Silicon", "Magnesium", "Aluminium", "Silica", "Alumina", "Magnesia", "Zinc", "Calcium", "Beryllium", "Beryl"};
+    public static final String[] crystalAtoms = new String[]{"Fe", "Au", "S", "C", "O", "H", "N", "P", "K", "NO₃", "CH₄", "none", "An",
+            "Cor", "Dr", "none", "Sn", "Cu", "Si", "Mg", "Al", "SiO₂", "Al₂O₃", "MgO", "Zn", "Ca", "Be", "Be₃Al₂(SiO₃)₆"};
 }

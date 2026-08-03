@@ -11,93 +11,40 @@
  ******************************************************************************/
 package com.shinoow.abyssalcraft;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.shinoow.abyssalcraft.init.ACRegistries;
+import com.shinoow.abyssalcraft.lib.ACConfig;
+import com.shinoow.abyssalcraft.lib.ACConfigSpec;
+import com.shinoow.abyssalcraft.lib.ACTabs;
 
-import com.shinoow.abyssalcraft.common.CommonProxy;
-import com.shinoow.abyssalcraft.common.command.CommandUnlockAllKnowledge;
-import com.shinoow.abyssalcraft.common.handlers.IMCHandler;
-import com.shinoow.abyssalcraft.common.util.ACLogger;
-import com.shinoow.abyssalcraft.init.*;
-
-import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.Mod.EventHandler;
-import net.minecraftforge.fml.common.Mod.Instance;
-import net.minecraftforge.fml.common.Mod.Metadata;
-import net.minecraftforge.fml.common.ModMetadata;
-import net.minecraftforge.fml.common.SidedProxy;
-import net.minecraftforge.fml.common.event.*;
+import net.minecraftforge.fml.config.ModConfig;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.fml.loading.FMLEnvironment;
 
-@Mod(modid = AbyssalCraft.modid, name = AbyssalCraft.name, version = AbyssalCraft.version,dependencies = "required-after:forge@[forgeversion,);after:jei@[4.11.0,)", useMetadata = false, guiFactory = "com.shinoow.abyssalcraft.client.config.ACGuiFactory", acceptedMinecraftVersions = "[1.12.2]", updateJSON = "https://raw.githubusercontent.com/Shinoow/AbyssalCraft/master/version.json", certificateFingerprint = "cert_fingerprint")
+@Mod(AbyssalCraft.MOD_ID)
 public class AbyssalCraft {
 
-	public static final String version = "ac_version";
-	public static final String modid = "abyssalcraft";
-	public static final String name = "AbyssalCraft";
+    public static final String MOD_ID = "abyssalcraft";
+    public static final String NAME = "AbyssalCraft";
 
-	@Metadata(AbyssalCraft.modid)
-	public static ModMetadata metadata;
+    /** Kept for the many read sites that referenced the old lowercase constant. */
+    public static final String modid = MOD_ID;
 
-	@Instance(AbyssalCraft.modid)
-	public static AbyssalCraft instance = new AbyssalCraft();
+    public AbyssalCraft() {
+        IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
 
-	@SidedProxy(clientSide = "com.shinoow.abyssalcraft.client.ClientProxy",
-			serverSide = "com.shinoow.abyssalcraft.common.CommonProxy")
-	public static CommonProxy proxy;
+        ACRegistries.register(modBus);
+        ACTabs.register();
 
-	private static List<ILifeCycleHandler> handlers = new ArrayList<ILifeCycleHandler>(){{
-		add(InitHandler.INSTANCE);
-		add(new BlockHandler());
-		add(new WorldHandler());
-		add(new ItemHandler());
-		add(new MiscHandler());
-		add(new EntityHandler());
-		add(new IntegrationHandler());
-	}};
+        modBus.addListener(ACConfig::onConfigLoad);
+        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, ACConfigSpec.SPEC);
+    }
 
-	static { FluidRegistry.enableUniversalBucket(); }
-
-	@EventHandler
-	public void preInit(FMLPreInitializationEvent event) {
-		handlers.forEach(handler -> handler.preInit(event));
-		proxy.preInit();
-	}
-
-	@EventHandler
-	public void Init(FMLInitializationEvent event) {
-		proxy.init();
-		handlers.forEach(handler -> handler.init(event));
-	}
-
-	@EventHandler
-	public void postInit(FMLPostInitializationEvent event) {
-		proxy.postInit();
-		handlers.forEach(handler -> handler.postInit(event));
-	}
-
-	@EventHandler
-	public void loadComplete(FMLLoadCompleteEvent event){
-		handlers.forEach(handler -> handler.loadComplete(event));
-	}
-
-	@EventHandler
-	public void serverStart(FMLServerAboutToStartEvent event){
-		InitHandler.INSTANCE.serverStart(event);
-	}
-
-	@EventHandler
-	public void serverStarting(FMLServerStartingEvent event){
-		event.registerServerCommand(new CommandUnlockAllKnowledge());
-	}
-
-	@EventHandler
-	public void handleIMC(FMLInterModComms.IMCEvent event){
-		IMCHandler.handleIMC(event);
-	}
-
-	@EventHandler
-	public void onFingerprintViolation(FMLFingerprintViolationEvent event) {
-		ACLogger.warning("Invalid fingerprint detected! The file " + event.getSource().getName() + " may have been tampered with. This version will NOT be supported by the author!");
-	}
+    /** Replaces the 1.12.2 {@code @SidedProxy} split. */
+    public static boolean isClient() {
+        return FMLEnvironment.dist == Dist.CLIENT;
+    }
 }
