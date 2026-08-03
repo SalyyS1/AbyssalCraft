@@ -1,0 +1,14 @@
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        maven { name = 'MinecraftForge'; url = 'https://maven.minecraftforge.net/' }
+        maven { name = 'Parchment';     url = 'https://maven.parchmentmc.org' }
+    }
+}
+
+// Lets Gradle download a JDK 17 toolchain itself: this machine only has JDK 21 + JRE 8.
+plugins {
+    id 'org.gradle.toolchains.foojay-resolver-convention' version '0.4.0'
+}
+
+rootProject.name = 'AbyssalCraft'
