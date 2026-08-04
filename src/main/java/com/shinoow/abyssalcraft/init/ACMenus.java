@@ -14,6 +14,7 @@ package com.shinoow.abyssalcraft.init;
 import com.shinoow.abyssalcraft.common.inventory.CrystallizerMenu;
 import com.shinoow.abyssalcraft.common.inventory.EngraverMenu;
 import com.shinoow.abyssalcraft.common.inventory.MaterializerMenu;
+import com.shinoow.abyssalcraft.common.inventory.StateTransformerMenu;
 import com.shinoow.abyssalcraft.common.inventory.TransmutatorMenu;
 
 import net.minecraft.world.inventory.MenuType;
@@ -49,6 +50,11 @@ public final class ACMenus {
             ACRegistries.MENUS.register("materializer",
                     () -> IForgeMenuType.create((IContainerFactory<MaterializerMenu>)
                             (id, inventory, buffer) -> new MaterializerMenu(id, inventory)));
+
+    public static final RegistryObject<MenuType<StateTransformerMenu>> STATE_TRANSFORMER =
+            ACRegistries.MENUS.register("state_transformer",
+                    () -> IForgeMenuType.create((IContainerFactory<StateTransformerMenu>)
+                            (id, inventory, buffer) -> new StateTransformerMenu(id, inventory)));
 
     private ACMenus() {}
 

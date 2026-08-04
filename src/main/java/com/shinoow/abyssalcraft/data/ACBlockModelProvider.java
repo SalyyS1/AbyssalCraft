@@ -70,6 +70,13 @@ public class ACBlockModelProvider extends BlockStateProvider {
         machine(ACBlocks.transmutator_idle.get(), "transmutator", "transmutator_front_off");
         machine(ACBlocks.transmutator_active.get(), "transmutator", "transmutator_front_on");
         machine(ACBlocks.materializer.get(), "materializer", "materializer_front");
+        // The State Transformer ships only a side and a front sprite, so the side doubles
+        // as the top, which is what the 1.12.2 model did.
+        var transformer = models().orientable("state_transformer",
+                texture("statetransformer"), texture("statetransformer_front"),
+                texture("statetransformer"));
+        horizontalBlock(ACBlocks.state_transformer.get(), transformer);
+        simpleBlockItem(ACBlocks.state_transformer.get(), transformer);
 
         // The Engraver shipped an OBJ model on 1.12.2, which needs Forge's OBJ loader; until that
         // is wired up it renders as a cube using the same texture that OBJ referenced.

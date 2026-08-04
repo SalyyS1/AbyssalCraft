@@ -19,6 +19,7 @@ import com.shinoow.abyssalcraft.client.model.entity.ShadowMonsterModel;
 import com.shinoow.abyssalcraft.client.gui.CrystallizerScreen;
 import com.shinoow.abyssalcraft.client.gui.EngraverScreen;
 import com.shinoow.abyssalcraft.client.gui.MaterializerScreen;
+import com.shinoow.abyssalcraft.client.gui.StateTransformerScreen;
 import com.shinoow.abyssalcraft.client.gui.TransmutatorScreen;
 import com.shinoow.abyssalcraft.client.render.ACModelLayers;
 import com.shinoow.abyssalcraft.client.render.entity.AbyssalZombieRenderer;
@@ -77,6 +78,7 @@ public final class ACClientSetup {
             MenuScreens.register(ACMenus.TRANSMUTATOR.get(), TransmutatorScreen::new);
             MenuScreens.register(ACMenus.ENGRAVER.get(), EngraverScreen::new);
             MenuScreens.register(ACMenus.MATERIALIZER.get(), MaterializerScreen::new);
+            MenuScreens.register(ACMenus.STATE_TRANSFORMER.get(), StateTransformerScreen::new);
         });
     }
 

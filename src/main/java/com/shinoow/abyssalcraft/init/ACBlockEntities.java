@@ -20,6 +20,7 @@ import com.shinoow.abyssalcraft.common.blocks.tile.EnergyContainerBlockEntity;
 import com.shinoow.abyssalcraft.common.blocks.tile.MaterializerBlockEntity;
 import com.shinoow.abyssalcraft.common.blocks.tile.RitualAltarBlockEntity;
 import com.shinoow.abyssalcraft.common.blocks.tile.SacrificialAltarBlockEntity;
+import com.shinoow.abyssalcraft.common.blocks.tile.StateTransformerBlockEntity;
 import com.shinoow.abyssalcraft.common.blocks.tile.TransmutatorBlockEntity;
 
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -80,6 +81,11 @@ public final class ACBlockEntities {
     public static final RegistryObject<BlockEntityType<MaterializerBlockEntity>> MATERIALIZER =
             ACRegistries.BLOCK_ENTITIES.register("materializer", () -> BlockEntityType.Builder
                     .of(MaterializerBlockEntity::new, ACBlocks.materializer.get())
+                    .build(null));
+
+    public static final RegistryObject<BlockEntityType<StateTransformerBlockEntity>> STATE_TRANSFORMER =
+            ACRegistries.BLOCK_ENTITIES.register("state_transformer", () -> BlockEntityType.Builder
+                    .of(StateTransformerBlockEntity::new, ACBlocks.state_transformer.get())
                     .build(null));
 
     private ACBlockEntities() {}
