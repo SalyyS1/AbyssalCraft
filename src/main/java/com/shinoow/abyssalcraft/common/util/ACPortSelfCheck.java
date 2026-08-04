@@ -40,6 +40,8 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.storage.loot.LootDataManager;
+import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraftforge.event.server.ServerStartedEvent;
 import net.minecraftforge.registries.RegistryObject;
 
@@ -65,6 +67,7 @@ public final class ACPortSelfCheck {
         checkKnowledgeGating(problems);
         int rituals = checkRituals(problems);
         checkCapabilityRegistered(problems);
+        checkBlockLootTables(event, problems);
 
         if (problems.isEmpty()) {
             ACLogger.info("Port self-check: {} blocks, {} items, {} machine recipes, {} entities and {} rituals resolved; PE storage and Necronomicon gating OK.",
@@ -273,6 +276,31 @@ public final class ACPortSelfCheck {
     private static void checkCapabilityRegistered(List<String> problems) {
         if (!ACKnowledge.CAPABILITY.isRegistered()) {
             problems.add("Necronomicon progress capability was never registered");
+        }
+    }
+
+    /**
+     * Confirms every block resolves a real loot table. A block with no table quietly drops nothing
+     * when broken, which reads as a gameplay bug rather than missing data, so it is worth catching
+     * at startup.
+     */
+    private static void checkBlockLootTables(ServerStartedEvent event, List<String> problems) {
+        LootDataManager lootData = event.getServer().getLootData();
+        int missing = 0;
+
+        for (Field field : ACBlocks.class.getDeclaredFields()) {
+            RegistryObject<Block> entry = readEntry(field, problems);
+            if (entry == null || !entry.isPresent()) {
+                continue;
+            }
+            ResourceLocation table = entry.get().getLootTable();
+            if (lootData.getLootTable(table) == LootTable.EMPTY) {
+                problems.add(field.getName() + ": no loot table at " + table);
+                missing++;
+            }
+        }
+        if (missing == 0) {
+            ACLogger.fine("Port self-check: every registered block resolves a loot table.");
         }
     }
 
