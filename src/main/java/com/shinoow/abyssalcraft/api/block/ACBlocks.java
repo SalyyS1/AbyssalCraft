@@ -15,6 +15,9 @@ import java.util.function.Supplier;
 
 import com.shinoow.abyssalcraft.common.blocks.ACBlockProperties;
 import com.shinoow.abyssalcraft.common.blocks.CrystallizerBlock;
+import com.shinoow.abyssalcraft.common.blocks.EnergyBlock;
+import com.shinoow.abyssalcraft.common.blocks.tile.EnergyCollectorBlockEntity;
+import com.shinoow.abyssalcraft.common.blocks.tile.EnergyContainerBlockEntity;
 import com.shinoow.abyssalcraft.init.ACRegistries;
 
 import net.minecraft.world.item.BlockItem;
@@ -126,6 +129,14 @@ public class ACBlocks {
     public static final RegistryObject<Block> crystallizer_active = register("crystallizer_active",
             () -> new CrystallizerBlock(
                     ACBlockProperties.glowingStone(3.5F, 6.0F, MapColor.COLOR_CYAN, 13), true));
+
+    // ---- Potential Energy ----
+    public static final RegistryObject<Block> energy_collector = register("energy_collector",
+            () -> new EnergyBlock(ACBlockProperties.stone(3.0F, 6.0F, MapColor.COLOR_PURPLE),
+                    EnergyCollectorBlockEntity::new));
+    public static final RegistryObject<Block> energy_container = register("energy_container",
+            () -> new EnergyBlock(ACBlockProperties.stone(3.0F, 6.0F, MapColor.COLOR_PURPLE),
+                    EnergyContainerBlockEntity::new));
 
     private ACBlocks() {}
 

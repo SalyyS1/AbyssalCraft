@@ -20,8 +20,10 @@ import com.shinoow.abyssalcraft.api.block.ACBlocks;
 import com.shinoow.abyssalcraft.api.item.ACItems;
 import com.shinoow.abyssalcraft.api.recipe.CrystallizerRecipes;
 import com.shinoow.abyssalcraft.api.recipe.TransmutatorRecipes;
+import com.shinoow.abyssalcraft.common.blocks.tile.EnergyContainerBlockEntity;
 import com.shinoow.abyssalcraft.init.ACEntities;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
@@ -51,9 +53,10 @@ public final class ACPortSelfCheck {
         int items = checkItems(problems);
         int recipes = checkMachineRecipes(problems);
         int entities = checkEntities(event, problems);
+        checkEnergyStorage(problems);
 
         if (problems.isEmpty()) {
-            ACLogger.info("Port self-check: {} blocks, {} items, {} machine recipes and {} entities resolved.",
+            ACLogger.info("Port self-check: {} blocks, {} items, {} machine recipes and {} entities resolved; PE storage OK.",
                     blocks, items, recipes, entities);
         } else {
             ACLogger.severe("Port self-check: {} problems across {} blocks, {} items, {} recipes and {} entities:",
@@ -141,6 +144,41 @@ public final class ACPortSelfCheck {
         }
 
         return checked;
+    }
+
+    /**
+     * Exercises the Potential Energy storage contract on a detached container: fill past capacity,
+     * over-drain, and confirm the clamping and drain-to-empty behaviour still match 1.12.2. The PE
+     * system is the backbone of the rituals and machines, so a silent regression here would be
+     * expensive to trace later.
+     */
+    private static void checkEnergyStorage(List<String> problems) {
+        EnergyContainerBlockEntity container =
+                new EnergyContainerBlockEntity(BlockPos.ZERO, ACBlocks.energy_container.get().defaultBlockState());
+
+        if (container.getContainedEnergy() != 0.0F) {
+            problems.add("PE container does not start empty");
+        }
+        if (container.canTransferPE()) {
+            problems.add("PE container claims it can transfer while empty");
+        }
+
+        container.addEnergy(EnergyContainerBlockEntity.CAPACITY + 500.0F);
+        if (container.getContainedEnergy() != EnergyContainerBlockEntity.CAPACITY) {
+            problems.add("PE container did not clamp to capacity, holds " + container.getContainedEnergy());
+        }
+        if (container.canAcceptPE()) {
+            problems.add("PE container claims it can accept more while full");
+        }
+
+        float drained = container.consumeEnergy(EnergyContainerBlockEntity.CAPACITY + 500.0F);
+        if (drained != EnergyContainerBlockEntity.CAPACITY) {
+            problems.add("PE container over-drain returned " + drained
+                    + " instead of " + EnergyContainerBlockEntity.CAPACITY);
+        }
+        if (container.getContainedEnergy() != 0.0F) {
+            problems.add("PE container did not empty, holds " + container.getContainedEnergy());
+        }
     }
 
     private static int checkBlocks(List<String> problems) {

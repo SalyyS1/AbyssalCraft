@@ -13,6 +13,8 @@ package com.shinoow.abyssalcraft.init;
 
 import com.shinoow.abyssalcraft.api.block.ACBlocks;
 import com.shinoow.abyssalcraft.common.blocks.tile.CrystallizerBlockEntity;
+import com.shinoow.abyssalcraft.common.blocks.tile.EnergyCollectorBlockEntity;
+import com.shinoow.abyssalcraft.common.blocks.tile.EnergyContainerBlockEntity;
 
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.registries.RegistryObject;
@@ -31,6 +33,16 @@ public final class ACBlockEntities {
                     .of(CrystallizerBlockEntity::new,
                             ACBlocks.crystallizer_idle.get(),
                             ACBlocks.crystallizer_active.get())
+                    .build(null));
+
+    public static final RegistryObject<BlockEntityType<EnergyCollectorBlockEntity>> ENERGY_COLLECTOR =
+            ACRegistries.BLOCK_ENTITIES.register("energy_collector", () -> BlockEntityType.Builder
+                    .of(EnergyCollectorBlockEntity::new, ACBlocks.energy_collector.get())
+                    .build(null));
+
+    public static final RegistryObject<BlockEntityType<EnergyContainerBlockEntity>> ENERGY_CONTAINER =
+            ACRegistries.BLOCK_ENTITIES.register("energy_container", () -> BlockEntityType.Builder
+                    .of(EnergyContainerBlockEntity::new, ACBlocks.energy_container.get())
                     .build(null));
 
     private ACBlockEntities() {}
