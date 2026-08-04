@@ -35,6 +35,7 @@ import com.shinoow.abyssalcraft.common.entity.demon.EvilSheep;
 import com.shinoow.abyssalcraft.common.entity.anti.AntiAbyssalZombie;
 import com.shinoow.abyssalcraft.common.entity.anti.AntiGhoul;
 import com.shinoow.abyssalcraft.common.entity.anti.AntiSpider;
+import com.shinoow.abyssalcraft.common.entity.anti.AntiBat;
 import com.shinoow.abyssalcraft.common.entity.AbyssalZombie;
 import com.shinoow.abyssalcraft.common.entity.DepthsGhoul;
 import com.shinoow.abyssalcraft.common.entity.DreadSpawn;
@@ -127,6 +128,13 @@ public final class ACEntities {
     public static final RegistryObject<EntityType<AntiSpider>> ANTI_SPIDER =
             monster("antispider", AntiSpider::new, 1.4F, 0.9F);
 
+    public static final RegistryObject<EntityType<AntiBat>> ANTI_BAT =
+            ACRegistries.ENTITIES.register("antibat", () -> EntityType.Builder
+                    .of(AntiBat::new, MobCategory.AMBIENT)
+                    .sized(0.5F, 0.9F)
+                    .clientTrackingRange(4)
+                    .build(AbyssalCraft.MOD_ID + ":antibat"));
+
     private ACEntities() {}
 
     private static <T extends Monster> RegistryObject<EntityType<T>> monster(String name,
@@ -149,6 +157,7 @@ public final class ACEntities {
     }
 
     public static void registerAttributes(EntityAttributeCreationEvent event) {
+        event.put(ANTI_BAT.get(), AntiBat.createAttributes().build());
         event.put(ANTI_ABYSSAL_ZOMBIE.get(), AntiAbyssalZombie.createAttributes().build());
         event.put(ANTI_GHOUL.get(), AntiGhoul.createAttributes().build());
         event.put(ANTI_SPIDER.get(), AntiSpider.createAttributes().build());

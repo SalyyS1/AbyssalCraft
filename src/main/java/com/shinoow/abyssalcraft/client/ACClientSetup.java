@@ -45,6 +45,7 @@ import com.shinoow.abyssalcraft.client.render.entity.EvilSheepRenderer;
 import com.shinoow.abyssalcraft.client.render.entity.AntiAbyssalZombieRenderer;
 import com.shinoow.abyssalcraft.client.render.entity.AntiGhoulRenderer;
 import com.shinoow.abyssalcraft.client.render.entity.AntiSpiderRenderer;
+import com.shinoow.abyssalcraft.client.render.entity.AntiBatRenderer;
 import com.shinoow.abyssalcraft.client.render.entity.AbyssalZombieRenderer;
 import com.shinoow.abyssalcraft.client.render.entity.DepthsGhoulRenderer;
 import com.shinoow.abyssalcraft.client.render.entity.DreadSpawnRenderer;
@@ -91,6 +92,7 @@ public final class ACClientSetup {
         event.registerEntityRenderer(ACEntities.DREAD_SPAWN.get(), DreadSpawnRenderer::new);
         event.registerEntityRenderer(ACEntities.ABYSSAL_ZOMBIE.get(), AbyssalZombieRenderer::new);
         event.registerEntityRenderer(ACEntities.DEPTHS_GHOUL.get(), DepthsGhoulRenderer::new);
+        event.registerEntityRenderer(ACEntities.ANTI_BAT.get(), AntiBatRenderer::new);
         event.registerEntityRenderer(ACEntities.ANTI_ABYSSAL_ZOMBIE.get(), AntiAbyssalZombieRenderer::new);
         event.registerEntityRenderer(ACEntities.ANTI_GHOUL.get(), AntiGhoulRenderer::new);
         event.registerEntityRenderer(ACEntities.ANTI_SPIDER.get(), AntiSpiderRenderer::new);
