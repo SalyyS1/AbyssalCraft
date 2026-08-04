@@ -47,5 +47,10 @@ public final class ACDataGenerators {
 
         generator.addProvider(event.includeServer(), new ACBlockTagsProvider(output,
                 event.getLookupProvider(), event.getExistingFileHelper()));
+
+        generator.addProvider(event.includeClient(),
+                new ACBlockModelProvider(event, event.getExistingFileHelper()));
+        generator.addProvider(event.includeClient(),
+                new ACItemModelProvider(event, event.getExistingFileHelper()));
     }
 }
