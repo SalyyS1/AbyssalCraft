@@ -189,6 +189,23 @@ dependency graph: nothing compiles until registries and the mod entrypoint exist
 - 28 crystal types tint one shared greyscale sprite, as before.
 - **Gate met:** client boots with **0 missing models and 0 missing textures**.
 
+**Phase 04 - machines: 7 of 9 done (verified).**
+Crystallizer, Transmutator, Engraver, Crate, Sacrificial Altar, Materializer,
+State Transformer. Three shared base classes hold what 1.12.2 duplicated per
+machine. Remaining two are blocked on unported subsystems: the Rending Pedestal
+needs the spawner/parent entity system, the Spirit Altar the full item-transfer
+capability.
+
+**Phase 05 - entities: 11 of 46 done (verified).**
+Depths Ghoul, Abyssal Zombie, Dreadling, Dread Spawn, Shadow Creature, Shadow
+Monster, both golems, Omothol Ghoul, Gatekeeper Minion, Shadow Beast. Five base
+classes absorb the shared AI and the hardcore stat swap. Every type is asserted
+to construct with valid attributes at startup.
+
+**Phase 06 - rendering: done for all ported content (verified).**
+Client boots with 0 missing models and 0 missing textures. 58 blockstates, 58
+block models, 266 item models generated from a texture mapping table.
+
 **Not started:** phases 11-17 (spells, biomes, dimensions, structures,
 potions/enchants, JEI, playthrough validation), plus the remaining machines,
 40 mobs and ~90 blocks. The remaining Java lives uncompiled in `src/legacy/`
