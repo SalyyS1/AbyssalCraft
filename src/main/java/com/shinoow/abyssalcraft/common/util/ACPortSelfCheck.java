@@ -64,6 +64,7 @@ public final class ACPortSelfCheck {
         checkEnergyStorage(problems);
         checkKnowledgeGating(problems);
         int rituals = checkRituals(problems);
+        checkCapabilityRegistered(problems);
 
         if (problems.isEmpty()) {
             ACLogger.info("Port self-check: {} blocks, {} items, {} machine recipes, {} entities and {} rituals resolved; PE storage and Necronomicon gating OK.",
@@ -261,6 +262,17 @@ public final class ACPortSelfCheck {
         if (ConditionProcessorRegistry.instance().getProcessorCount() != 7) {
             problems.add("Necronomicon: expected 7 condition processors, found "
                     + ConditionProcessorRegistry.instance().getProcessorCount());
+        }
+    }
+
+    /**
+     * Confirms the knowledge capability was actually registered. An unregistered capability yields
+     * a token that silently resolves empty for every player, which would look like a progression
+     * reset rather than a missing registration.
+     */
+    private static void checkCapabilityRegistered(List<String> problems) {
+        if (!ACKnowledge.CAPABILITY.isRegistered()) {
+            problems.add("Necronomicon progress capability was never registered");
         }
     }
 

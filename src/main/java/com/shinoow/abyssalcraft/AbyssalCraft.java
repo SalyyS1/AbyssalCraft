@@ -15,6 +15,8 @@ import com.shinoow.abyssalcraft.api.block.ACBlocks;
 import com.shinoow.abyssalcraft.api.item.ACItems;
 import com.shinoow.abyssalcraft.api.necronomicon.condition.ACConditionProcessors;
 import com.shinoow.abyssalcraft.common.AbyssalCrafting;
+import com.shinoow.abyssalcraft.common.handlers.ACKnowledgeHandler;
+import com.shinoow.abyssalcraft.common.network.ACPacketHandler;
 import com.shinoow.abyssalcraft.common.util.ACPortSelfCheck;
 import com.shinoow.abyssalcraft.init.ACBlockEntities;
 import com.shinoow.abyssalcraft.init.ACEntities;
@@ -58,9 +60,13 @@ public class AbyssalCraft {
         modBus.addListener(ACConfig::onConfigLoad);
         modBus.addListener(this::commonSetup);
         modBus.addListener(ACEntities::registerAttributes);
+        modBus.addListener(ACKnowledgeHandler::registerCapabilities);
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, ACConfigSpec.SPEC);
 
         MinecraftForge.EVENT_BUS.addListener(ACPortSelfCheck::onServerStarted);
+        MinecraftForge.EVENT_BUS.addGenericListener(net.minecraft.world.entity.Entity.class,
+                ACKnowledgeHandler::attach);
+        MinecraftForge.EVENT_BUS.addListener(ACKnowledgeHandler::onPlayerClone);
     }
 
     /**
@@ -71,6 +77,7 @@ public class AbyssalCraft {
         event.enqueueWork(AbyssalCrafting::init);
         event.enqueueWork(ACConditionProcessors::register);
         event.enqueueWork(ACRituals::register);
+        event.enqueueWork(ACPacketHandler::register);
     }
 
     /** Replaces the 1.12.2 {@code @SidedProxy} split. */
