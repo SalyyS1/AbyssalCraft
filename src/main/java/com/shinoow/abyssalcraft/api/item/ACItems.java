@@ -11,9 +11,13 @@
  ******************************************************************************/
 package com.shinoow.abyssalcraft.api.item;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 import java.util.function.Supplier;
 
 import com.shinoow.abyssalcraft.init.ACRegistries;
+import com.shinoow.abyssalcraft.lib.ACLib;
 import com.shinoow.abyssalcraft.lib.item.ACArmorMaterial;
 import com.shinoow.abyssalcraft.lib.item.ACItemTier;
 
@@ -224,7 +228,36 @@ public class ACItems {
     public static final RegistryObject<Item> oblivion_catalyst = simple("oblivion_catalyst");
     public static final RegistryObject<Item> essence_of_the_gatekeeper = simple("essence_of_the_gatekeeper");
 
+    /**
+     * Crystals and crystal shards, one item per type.
+     * <p>
+     * 1.12.2 stored the crystal type in item metadata, so {@code crystal_shard} damage 15 was the
+     * Blaze shard. Metadata is gone, so each of the 28 types in {@link ACLib#crystalNames} becomes
+     * its own item, indexed here in the same order the old metadata used.
+     */
+    public static final List<RegistryObject<Item>> crystals = registerCrystalSet("crystal");
+    public static final List<RegistryObject<Item>> crystal_shards = registerCrystalSet("crystal_shard");
+
     private ACItems() {}
+
+    /** Registers one item per crystal type, in the order the 1.12.2 metadata used. */
+    private static List<RegistryObject<Item>> registerCrystalSet(String prefix) {
+        List<RegistryObject<Item>> entries = new ArrayList<>(ACLib.crystalNames.length);
+        for (String crystal : ACLib.crystalNames) {
+            entries.add(simple(prefix + "_" + crystal.toLowerCase(Locale.ROOT)));
+        }
+        return List.copyOf(entries);
+    }
+
+    /** Looks up a crystal by its 1.12.2 metadata index. */
+    public static Item crystal(int type) {
+        return crystals.get(type).get();
+    }
+
+    /** Looks up a crystal shard by its 1.12.2 metadata index. */
+    public static Item crystalShard(int type) {
+        return crystal_shards.get(type).get();
+    }
 
     private static RegistryObject<Item> simple(String name) {
         return ACRegistries.ITEMS.register(name, () -> new Item(new Item.Properties()));

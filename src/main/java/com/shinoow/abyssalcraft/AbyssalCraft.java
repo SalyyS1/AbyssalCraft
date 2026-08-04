@@ -13,7 +13,10 @@ package com.shinoow.abyssalcraft;
 
 import com.shinoow.abyssalcraft.api.block.ACBlocks;
 import com.shinoow.abyssalcraft.api.item.ACItems;
+import com.shinoow.abyssalcraft.common.AbyssalCrafting;
 import com.shinoow.abyssalcraft.common.util.ACPortSelfCheck;
+import com.shinoow.abyssalcraft.init.ACBlockEntities;
+import com.shinoow.abyssalcraft.init.ACMenus;
 import com.shinoow.abyssalcraft.init.ACRegistries;
 import com.shinoow.abyssalcraft.lib.ACConfig;
 import com.shinoow.abyssalcraft.lib.ACConfigSpec;
@@ -25,6 +28,7 @@ import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 
@@ -43,12 +47,23 @@ public class AbyssalCraft {
         ACRegistries.register(modBus);
         ACBlocks.register();
         ACItems.register();
+        ACBlockEntities.register();
+        ACMenus.register();
         ACTabs.register();
 
         modBus.addListener(ACConfig::onConfigLoad);
+        modBus.addListener(this::commonSetup);
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, ACConfigSpec.SPEC);
 
         MinecraftForge.EVENT_BUS.addListener(ACPortSelfCheck::onServerStarted);
+    }
+
+    /**
+     * Machine recipes are registered here rather than in the constructor: they build ItemStacks,
+     * which requires the item registry to have been populated already.
+     */
+    private void commonSetup(FMLCommonSetupEvent event) {
+        event.enqueueWork(AbyssalCrafting::init);
     }
 
     /** Replaces the 1.12.2 {@code @SidedProxy} split. */

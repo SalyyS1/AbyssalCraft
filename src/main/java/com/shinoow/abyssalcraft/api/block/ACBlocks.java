@@ -14,6 +14,7 @@ package com.shinoow.abyssalcraft.api.block;
 import java.util.function.Supplier;
 
 import com.shinoow.abyssalcraft.common.blocks.ACBlockProperties;
+import com.shinoow.abyssalcraft.common.blocks.CrystallizerBlock;
 import com.shinoow.abyssalcraft.init.ACRegistries;
 
 import net.minecraft.world.item.BlockItem;
@@ -114,6 +115,17 @@ public class ACBlocks {
     public static final RegistryObject<Block> calcified_stone = stone("calcified_stone", 1.5F, 10.0F, MapColor.SAND);
     public static final RegistryObject<Block> coralium_infused_stone = stone("coralium_infused_stone", 1.5F, 10.0F, MapColor.COLOR_CYAN);
     public static final RegistryObject<Block> dreadlands_infused_powerstone = stone("dreadlands_infused_powerstone", 2.5F, 20.0F, MapColor.COLOR_RED);
+
+    // ---- Machines ----
+    /**
+     * The Crystallizer keeps its 1.12.2 idle/active block split so recipes and JEI entries that
+     * reference either form keep resolving.
+     */
+    public static final RegistryObject<Block> crystallizer_idle = register("crystallizer_idle",
+            () -> new CrystallizerBlock(ACBlockProperties.stone(3.5F, 6.0F, MapColor.COLOR_CYAN), false));
+    public static final RegistryObject<Block> crystallizer_active = register("crystallizer_active",
+            () -> new CrystallizerBlock(
+                    ACBlockProperties.glowingStone(3.5F, 6.0F, MapColor.COLOR_CYAN, 13), true));
 
     private ACBlocks() {}
 

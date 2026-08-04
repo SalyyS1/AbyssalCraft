@@ -14,9 +14,12 @@ package com.shinoow.abyssalcraft.common.util;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import com.shinoow.abyssalcraft.api.block.ACBlocks;
 import com.shinoow.abyssalcraft.api.item.ACItems;
+import com.shinoow.abyssalcraft.api.recipe.CrystallizerRecipes;
+import com.shinoow.abyssalcraft.api.recipe.TransmutatorRecipes;
 
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.Item;
@@ -41,14 +44,57 @@ public final class ACPortSelfCheck {
         List<String> problems = new ArrayList<>();
         int blocks = checkBlocks(problems);
         int items = checkItems(problems);
+        int recipes = checkMachineRecipes(problems);
 
         if (problems.isEmpty()) {
-            ACLogger.info("Port self-check: {} blocks and {} items resolved.", blocks, items);
+            ACLogger.info("Port self-check: {} blocks, {} items and {} machine recipes resolved.",
+                    blocks, items, recipes);
         } else {
-            ACLogger.severe("Port self-check: {} problems across {} blocks and {} items:",
-                    problems.size(), blocks, items);
+            ACLogger.severe("Port self-check: {} problems across {} blocks, {} items and {} recipes:",
+                    problems.size(), blocks, items, recipes);
             problems.forEach(problem -> ACLogger.severe("  {}", problem));
         }
+    }
+
+    /**
+     * Exercises the machine recipe registries rather than merely counting them: a recipe whose
+     * output failed to resolve would still be present in the map, so each entry is looked up the
+     * same way the machine looks it up and the result is compared against what was registered.
+     */
+    private static int checkMachineRecipes(List<String> problems) {
+        int checked = 0;
+
+        for (Map.Entry<ItemStack, ItemStack[]> entry : CrystallizerRecipes.instance().getCrystallizationList().entrySet()) {
+            checked++;
+            ItemStack input = entry.getKey();
+            ItemStack[] expected = entry.getValue();
+            if (input.isEmpty()) {
+                problems.add("crystallizer recipe has an empty input");
+                continue;
+            }
+            if (expected[0].isEmpty()) {
+                problems.add("crystallizer recipe for " + input.getItem() + " has an empty primary output");
+                continue;
+            }
+            ItemStack[] resolved = CrystallizerRecipes.instance().getCrystallizationResult(input);
+            if (!ItemStack.isSameItem(resolved[0], expected[0])) {
+                problems.add("crystallizer recipe for " + input.getItem() + " does not resolve to its own output");
+            }
+        }
+
+        for (Map.Entry<ItemStack, ItemStack> entry : TransmutatorRecipes.instance().getTransmutationList().entrySet()) {
+            checked++;
+            ItemStack input = entry.getKey();
+            if (input.isEmpty() || entry.getValue().isEmpty()) {
+                problems.add("transmutator recipe has an empty input or output");
+                continue;
+            }
+            if (!ItemStack.isSameItem(TransmutatorRecipes.instance().getTransmutationResult(input), entry.getValue())) {
+                problems.add("transmutator recipe for " + input.getItem() + " does not resolve to its own output");
+            }
+        }
+
+        return checked;
     }
 
     private static int checkBlocks(List<String> problems) {
@@ -75,15 +121,43 @@ public final class ACPortSelfCheck {
     private static int checkItems(List<String> problems) {
         int checked = 0;
         for (Field field : ACItems.class.getDeclaredFields()) {
+            // The crystal sets are Lists of entries rather than single ones; unpack them.
+            if (List.class.isAssignableFrom(field.getType())) {
+                checked += checkItemList(field, problems);
+                continue;
+            }
             RegistryObject<Item> entry = readEntry(field, problems);
             if (entry == null) {
                 continue;
             }
             checked++;
-            if (!verifyBound(field, entry, problems)) {
+            if (verifyBound(field, entry, problems) && !BuiltInRegistries.ITEM.containsKey(entry.getId())) {
+                problems.add(field.getName() + ": " + entry.getId() + " absent from the item registry");
+            }
+        }
+        return checked;
+    }
+
+    private static int checkItemList(Field field, List<String> problems) {
+        Object value;
+        try {
+            value = field.get(null);
+        } catch (ReflectiveOperationException | RuntimeException e) {
+            problems.add(field.getName() + ": " + e);
+            return 0;
+        }
+        if (!(value instanceof List<?> entries)) {
+            return 0;
+        }
+        int checked = 0;
+        for (Object element : entries) {
+            if (!(element instanceof RegistryObject<?> entry)) {
                 continue;
             }
-            if (!BuiltInRegistries.ITEM.containsKey(entry.getId())) {
+            checked++;
+            if (!entry.isPresent()) {
+                problems.add(field.getName() + ": an entry is unbound");
+            } else if (!BuiltInRegistries.ITEM.containsKey(entry.getId())) {
                 problems.add(field.getName() + ": " + entry.getId() + " absent from the item registry");
             }
         }
