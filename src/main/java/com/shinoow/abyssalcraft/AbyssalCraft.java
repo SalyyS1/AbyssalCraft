@@ -16,6 +16,7 @@ import com.shinoow.abyssalcraft.api.item.ACItems;
 import com.shinoow.abyssalcraft.common.AbyssalCrafting;
 import com.shinoow.abyssalcraft.common.util.ACPortSelfCheck;
 import com.shinoow.abyssalcraft.init.ACBlockEntities;
+import com.shinoow.abyssalcraft.init.ACEntities;
 import com.shinoow.abyssalcraft.init.ACMenus;
 import com.shinoow.abyssalcraft.init.ACRegistries;
 import com.shinoow.abyssalcraft.lib.ACConfig;
@@ -49,10 +50,12 @@ public class AbyssalCraft {
         ACItems.register();
         ACBlockEntities.register();
         ACMenus.register();
+        ACEntities.register();
         ACTabs.register();
 
         modBus.addListener(ACConfig::onConfigLoad);
         modBus.addListener(this::commonSetup);
+        modBus.addListener(ACEntities::registerAttributes);
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, ACConfigSpec.SPEC);
 
         MinecraftForge.EVENT_BUS.addListener(ACPortSelfCheck::onServerStarted);

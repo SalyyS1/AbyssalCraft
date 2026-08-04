@@ -20,8 +20,13 @@ import com.shinoow.abyssalcraft.api.block.ACBlocks;
 import com.shinoow.abyssalcraft.api.item.ACItems;
 import com.shinoow.abyssalcraft.api.recipe.CrystallizerRecipes;
 import com.shinoow.abyssalcraft.api.recipe.TransmutatorRecipes;
+import com.shinoow.abyssalcraft.init.ACEntities;
 
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
@@ -45,15 +50,56 @@ public final class ACPortSelfCheck {
         int blocks = checkBlocks(problems);
         int items = checkItems(problems);
         int recipes = checkMachineRecipes(problems);
+        int entities = checkEntities(event, problems);
 
         if (problems.isEmpty()) {
-            ACLogger.info("Port self-check: {} blocks, {} items and {} machine recipes resolved.",
-                    blocks, items, recipes);
+            ACLogger.info("Port self-check: {} blocks, {} items, {} machine recipes and {} entities resolved.",
+                    blocks, items, recipes, entities);
         } else {
-            ACLogger.severe("Port self-check: {} problems across {} blocks, {} items and {} recipes:",
-                    problems.size(), blocks, items, recipes);
+            ACLogger.severe("Port self-check: {} problems across {} blocks, {} items, {} recipes and {} entities:",
+                    problems.size(), blocks, items, recipes, entities);
             problems.forEach(problem -> ACLogger.severe("  {}", problem));
         }
+    }
+
+    /**
+     * Actually constructs each entity type in the overworld and checks that its attributes were
+     * registered. A missing {@code EntityAttributeCreationEvent} entry only throws when something
+     * first tries to spawn the mob, so this creates one and discards it.
+     */
+    private static int checkEntities(ServerStartedEvent event, List<String> problems) {
+        ServerLevel level = event.getServer().overworld();
+        int checked = 0;
+
+        for (Field field : ACEntities.class.getDeclaredFields()) {
+            RegistryObject<EntityType<?>> entry = readEntry(field, problems);
+            if (entry == null) {
+                continue;
+            }
+            checked++;
+            if (!verifyBound(field, entry, problems)) {
+                continue;
+            }
+            EntityType<?> type = entry.get();
+            if (!BuiltInRegistries.ENTITY_TYPE.containsKey(entry.getId())) {
+                problems.add(field.getName() + ": " + entry.getId() + " absent from the entity registry");
+                continue;
+            }
+            try {
+                Entity entity = type.create(level);
+                if (entity == null) {
+                    problems.add(field.getName() + ": " + entry.getId() + " could not be constructed");
+                } else {
+                    if (entity instanceof LivingEntity living && living.getMaxHealth() <= 0.0F) {
+                        problems.add(field.getName() + ": " + entry.getId() + " has no max health attribute");
+                    }
+                    entity.discard();
+                }
+            } catch (RuntimeException e) {
+                problems.add(field.getName() + ": " + entry.getId() + " failed to construct: " + e);
+            }
+        }
+        return checked;
     }
 
     /**
