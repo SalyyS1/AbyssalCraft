@@ -183,6 +183,13 @@ public class ACItems {
     public static final RegistryObject<Item> washcloth = simple("washcloth");
     public static final RegistryObject<Item> shoggoth_flesh = simple("shoggoth_flesh");
 
+    // ---- Necronomicon tiers. The book's tier gates rituals and knowledge. ----
+    public static final RegistryObject<Item> necronomicon = book("necronomicon");
+    public static final RegistryObject<Item> abyssal_wasteland_necronomicon = book("abyssal_wasteland_necronomicon");
+    public static final RegistryObject<Item> dreadlands_necronomicon = book("dreadlands_necronomicon");
+    public static final RegistryObject<Item> omothol_necronomicon = book("omothol_necronomicon");
+    public static final RegistryObject<Item> abyssalnomicon = book("abyssalnomicon");
+
     // ---- Crystal bags. Hold crystals for the Materializer to spend. ----
     public static final RegistryObject<Item> small_crystal_bag = simple("small_crystal_bag");
     public static final RegistryObject<Item> medium_crystal_bag = simple("medium_crystal_bag");
@@ -267,6 +274,12 @@ public class ACItems {
     /** Engraving stamps wear out; the blank one lasts 50 uses and the deity ones 10. */
     private static RegistryObject<Item> engraving(String name, int durability) {
         return ACRegistries.ITEMS.register(name, () -> new ItemEngraving(durability));
+    }
+
+    /** Necronomicons never stack, matching 1.12.2. */
+    private static RegistryObject<Item> book(String name) {
+        return ACRegistries.ITEMS.register(name,
+                () -> new Item(new Item.Properties().stacksTo(1)));
     }
 
     private static RegistryObject<Item> simple(String name) {

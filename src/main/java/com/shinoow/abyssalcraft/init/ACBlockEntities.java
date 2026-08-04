@@ -17,6 +17,7 @@ import com.shinoow.abyssalcraft.common.blocks.tile.CrystallizerBlockEntity;
 import com.shinoow.abyssalcraft.common.blocks.tile.EnergyCollectorBlockEntity;
 import com.shinoow.abyssalcraft.common.blocks.tile.EngraverBlockEntity;
 import com.shinoow.abyssalcraft.common.blocks.tile.EnergyContainerBlockEntity;
+import com.shinoow.abyssalcraft.common.blocks.tile.MaterializerBlockEntity;
 import com.shinoow.abyssalcraft.common.blocks.tile.RitualAltarBlockEntity;
 import com.shinoow.abyssalcraft.common.blocks.tile.SacrificialAltarBlockEntity;
 import com.shinoow.abyssalcraft.common.blocks.tile.TransmutatorBlockEntity;
@@ -74,6 +75,11 @@ public final class ACBlockEntities {
     public static final RegistryObject<BlockEntityType<SacrificialAltarBlockEntity>> SACRIFICIAL_ALTAR =
             ACRegistries.BLOCK_ENTITIES.register("sacrificial_altar", () -> BlockEntityType.Builder
                     .of(SacrificialAltarBlockEntity::new, ACBlocks.sacrificial_altar.get())
+                    .build(null));
+
+    public static final RegistryObject<BlockEntityType<MaterializerBlockEntity>> MATERIALIZER =
+            ACRegistries.BLOCK_ENTITIES.register("materializer", () -> BlockEntityType.Builder
+                    .of(MaterializerBlockEntity::new, ACBlocks.materializer.get())
                     .build(null));
 
     private ACBlockEntities() {}

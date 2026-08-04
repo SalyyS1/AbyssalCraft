@@ -17,6 +17,7 @@ import com.shinoow.abyssalcraft.common.blocks.ACBlockProperties;
 import com.shinoow.abyssalcraft.common.blocks.CrateBlock;
 import com.shinoow.abyssalcraft.common.blocks.EngraverBlock;
 import com.shinoow.abyssalcraft.common.blocks.MachineBlock;
+import com.shinoow.abyssalcraft.common.blocks.MaterializerBlock;
 import com.shinoow.abyssalcraft.common.blocks.EnergyBlock;
 import com.shinoow.abyssalcraft.common.blocks.tile.CrystallizerBlockEntity;
 import com.shinoow.abyssalcraft.common.blocks.tile.EnergyCollectorBlockEntity;
@@ -152,6 +153,10 @@ public class ACBlocks {
     /** The Wooden Crate: 36 slots of storage, with no facing. */
     public static final RegistryObject<Block> wooden_crate = register("wooden_crate",
             () -> new CrateBlock(ACBlockProperties.wood(3.0F, 6.0F, MapColor.WOOD)));
+
+    /** The Materializer previews what a crystal bag can afford; it has no lit variant. */
+    public static final RegistryObject<Block> materializer = register("materializer",
+            () -> new MaterializerBlock(ACBlockProperties.stone(3.5F, 6.0F, MapColor.COLOR_PURPLE)));
 
     // ---- Potential Energy ----
     public static final RegistryObject<Block> energy_collector = register("energy_collector",

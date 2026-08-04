@@ -69,6 +69,7 @@ public class ACBlockModelProvider extends BlockStateProvider {
         machine(ACBlocks.crystallizer_active.get(), "crystallizer", "crystallizer_front_on");
         machine(ACBlocks.transmutator_idle.get(), "transmutator", "transmutator_front_off");
         machine(ACBlocks.transmutator_active.get(), "transmutator", "transmutator_front_on");
+        machine(ACBlocks.materializer.get(), "materializer", "materializer_front");
 
         // The Engraver shipped an OBJ model on 1.12.2, which needs Forge's OBJ loader; until that
         // is wired up it renders as a cube using the same texture that OBJ referenced.

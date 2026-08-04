@@ -205,6 +205,11 @@ final class ACItemTextures {
         textures.put(ACItems.medium_crystal_bag, "crystalbag_medium");
         textures.put(ACItems.large_crystal_bag, "crystalbag_large");
         textures.put(ACItems.huge_crystal_bag, "crystalbag_huge");
+        textures.put(ACItems.necronomicon, "necronomicon");
+        textures.put(ACItems.abyssal_wasteland_necronomicon, "necronomicon_cor");
+        textures.put(ACItems.dreadlands_necronomicon, "necronomicon_dre");
+        textures.put(ACItems.omothol_necronomicon, "necronomicon_omt");
+        textures.put(ACItems.abyssalnomicon, "abyssalnomicon");
         return Map.copyOf(textures);
     }
 
