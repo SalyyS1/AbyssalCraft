@@ -183,6 +183,12 @@ public class ACItems {
     public static final RegistryObject<Item> washcloth = simple("washcloth");
     public static final RegistryObject<Item> shoggoth_flesh = simple("shoggoth_flesh");
 
+    // ---- Crystal bags. Hold crystals for the Materializer to spend. ----
+    public static final RegistryObject<Item> small_crystal_bag = simple("small_crystal_bag");
+    public static final RegistryObject<Item> medium_crystal_bag = simple("medium_crystal_bag");
+    public static final RegistryObject<Item> large_crystal_bag = simple("large_crystal_bag");
+    public static final RegistryObject<Item> huge_crystal_bag = simple("huge_crystal_bag");
+
     // ---- Coins and engravings ----
     public static final RegistryObject<Item> coin = simple("coin");
     public static final RegistryObject<Item> blank_engraving = engraving("blank_engraving", 50);

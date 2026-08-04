@@ -201,6 +201,10 @@ final class ACItemTextures {
         textures.put(ACItems.scroll, "scrolls/scroll_basic");
         textures.put(ACItems.unique_scroll, "scrolls/scroll_unique_anti");
         textures.put(ACItems.antidote, "coralium_antidote");
+        textures.put(ACItems.small_crystal_bag, "crystalbag_small");
+        textures.put(ACItems.medium_crystal_bag, "crystalbag_medium");
+        textures.put(ACItems.large_crystal_bag, "crystalbag_large");
+        textures.put(ACItems.huge_crystal_bag, "crystalbag_huge");
         return Map.copyOf(textures);
     }
 

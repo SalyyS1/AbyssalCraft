@@ -11,6 +11,12 @@
  ******************************************************************************/
 package com.shinoow.abyssalcraft.api;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import com.shinoow.abyssalcraft.api.item.ACItems;
+
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
 /**
@@ -23,7 +29,33 @@ public class APIUtils {
     /** Mirrors {@code ACConfig.display_names}; set during config bake. */
     public static boolean display_names;
 
+    /** Addon-registered items that should behave like crystals. */
+    private static final Set<Item> EXTRA_CRYSTALS = new HashSet<>();
+
     private APIUtils() {}
+
+    /**
+     * Whether the stack is one of the mod's crystals or crystal shards.
+     * <p>
+     * 1.12.2 answered this by scanning a runtime list that addons could add to, because all 28
+     * crystal types shared one item and were told apart by metadata. Each type is its own item now,
+     * so membership is a direct lookup against the registered sets; {@link #registerCrystal} keeps
+     * the addon extension point.
+     */
+    public static boolean isCrystal(ItemStack stack) {
+        if (stack.isEmpty()) {
+            return false;
+        }
+        Item item = stack.getItem();
+        return ACItems.crystals.stream().anyMatch(entry -> entry.get() == item)
+                || ACItems.crystal_shards.stream().anyMatch(entry -> entry.get() == item)
+                || EXTRA_CRYSTALS.contains(item);
+    }
+
+    /** Lets an addon declare its own item as behaving like a crystal. */
+    public static void registerCrystal(Item item) {
+        EXTRA_CRYSTALS.add(item);
+    }
 
     /**
      * Compares two ItemStacks.
