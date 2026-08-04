@@ -21,6 +21,9 @@ import com.shinoow.abyssalcraft.common.entity.Dreadguard;
 import com.shinoow.abyssalcraft.common.entity.SkeletonGoliath;
 import com.shinoow.abyssalcraft.common.entity.anti.AntiZombie;
 import com.shinoow.abyssalcraft.common.entity.anti.AntiSkeleton;
+import com.shinoow.abyssalcraft.common.entity.anti.AntiCow;
+import com.shinoow.abyssalcraft.common.entity.anti.AntiPig;
+import com.shinoow.abyssalcraft.common.entity.anti.AntiChicken;
 import com.shinoow.abyssalcraft.common.entity.AbyssalZombie;
 import com.shinoow.abyssalcraft.common.entity.DepthsGhoul;
 import com.shinoow.abyssalcraft.common.entity.DreadSpawn;
@@ -30,6 +33,7 @@ import com.shinoow.abyssalcraft.common.entity.ShadowMonster;
 
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
+import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.registries.RegistryObject;
@@ -81,6 +85,13 @@ public final class ACEntities {
     public static final RegistryObject<EntityType<AntiSkeleton>> ANTI_SKELETON =
             monster("antiskeleton", AntiSkeleton::new, 0.6F, 1.99F);
 
+    public static final RegistryObject<EntityType<AntiCow>> ANTI_COW =
+            animal("anticow", AntiCow::new, 0.9F, 1.3F);
+    public static final RegistryObject<EntityType<AntiPig>> ANTI_PIG =
+            animal("antipig", AntiPig::new, 0.9F, 0.9F);
+    public static final RegistryObject<EntityType<AntiChicken>> ANTI_CHICKEN =
+            animal("antichicken", AntiChicken::new, 0.3F, 0.7F);
+
     private ACEntities() {}
 
     private static <T extends Monster> RegistryObject<EntityType<T>> monster(String name,
@@ -92,7 +103,20 @@ public final class ACEntities {
                 .build(AbyssalCraft.MOD_ID + ":" + name));
     }
 
+
+    private static <T extends Animal> RegistryObject<EntityType<T>> animal(String name,
+            EntityType.EntityFactory<T> factory, float width, float height) {
+        return ACRegistries.ENTITIES.register(name, () -> EntityType.Builder
+                .of(factory, MobCategory.CREATURE)
+                .sized(width, height)
+                .clientTrackingRange(4)
+                .build(AbyssalCraft.MOD_ID + ":" + name));
+    }
+
     public static void registerAttributes(EntityAttributeCreationEvent event) {
+        event.put(ANTI_COW.get(), AntiCow.createAttributes().build());
+        event.put(ANTI_PIG.get(), AntiPig.createAttributes().build());
+        event.put(ANTI_CHICKEN.get(), AntiChicken.createAttributes().build());
         event.put(ANTI_ZOMBIE.get(), AntiZombie.createAttributes().build());
         event.put(ANTI_SKELETON.get(), AntiSkeleton.createAttributes().build());
         event.put(DREADGUARD.get(), Dreadguard.createAttributes().build());
