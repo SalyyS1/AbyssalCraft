@@ -86,6 +86,11 @@ tasks.named('processResources', ProcessResources).configure {
     ]
     inputs.properties replaceProps
     filesMatching(['META-INF/mods.toml', 'pack.mcmeta', 'version.properties']) { expand replaceProps }
+
+    // src/generated/resources is listed after src/main/resources, so on a name clash the generated
+    // file wins. Without a strategy the build fails outright on the duplicate, which happens every
+    // time datagen supersedes a hand-written 1.12.2 asset.
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
 }
 
 tasks.named('jar', Jar).configure {
