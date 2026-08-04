@@ -14,6 +14,7 @@ package com.shinoow.abyssalcraft.api.block;
 import java.util.function.Supplier;
 
 import com.shinoow.abyssalcraft.common.blocks.ACBlockProperties;
+import com.shinoow.abyssalcraft.common.blocks.CrateBlock;
 import com.shinoow.abyssalcraft.common.blocks.EngraverBlock;
 import com.shinoow.abyssalcraft.common.blocks.MachineBlock;
 import com.shinoow.abyssalcraft.common.blocks.EnergyBlock;
@@ -145,6 +146,10 @@ public class ACBlocks {
     /** The Engraver has no lit variant: it stamps coins rather than burning fuel. */
     public static final RegistryObject<Block> engraver = register("engraver",
             () -> new EngraverBlock(ACBlockProperties.stone(3.5F, 6.0F, MapColor.COLOR_GRAY)));
+
+    /** The Wooden Crate: 36 slots of storage, with no facing. */
+    public static final RegistryObject<Block> wooden_crate = register("wooden_crate",
+            () -> new CrateBlock(ACBlockProperties.wood(3.0F, 6.0F, MapColor.WOOD)));
 
     // ---- Potential Energy ----
     public static final RegistryObject<Block> energy_collector = register("energy_collector",

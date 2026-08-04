@@ -12,6 +12,7 @@
 package com.shinoow.abyssalcraft.init;
 
 import com.shinoow.abyssalcraft.api.block.ACBlocks;
+import com.shinoow.abyssalcraft.common.blocks.tile.CrateBlockEntity;
 import com.shinoow.abyssalcraft.common.blocks.tile.CrystallizerBlockEntity;
 import com.shinoow.abyssalcraft.common.blocks.tile.EnergyCollectorBlockEntity;
 import com.shinoow.abyssalcraft.common.blocks.tile.EngraverBlockEntity;
@@ -62,6 +63,11 @@ public final class ACBlockEntities {
     public static final RegistryObject<BlockEntityType<EngraverBlockEntity>> ENGRAVER =
             ACRegistries.BLOCK_ENTITIES.register("engraver", () -> BlockEntityType.Builder
                     .of(EngraverBlockEntity::new, ACBlocks.engraver.get())
+                    .build(null));
+
+    public static final RegistryObject<BlockEntityType<CrateBlockEntity>> CRATE =
+            ACRegistries.BLOCK_ENTITIES.register("crate", () -> BlockEntityType.Builder
+                    .of(CrateBlockEntity::new, ACBlocks.wooden_crate.get())
                     .build(null));
 
     private ACBlockEntities() {}
