@@ -17,3 +17,7 @@ src/generated/
 
 # Local backups of the 1.12.2 build files (superseded; see the legacy-1.12.2 branch)
 *.legacy*.bak
+
+# JVM crash dumps
+hs_err_pid*.log
+replay_pid*.log
