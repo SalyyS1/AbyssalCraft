@@ -18,6 +18,7 @@ import com.shinoow.abyssalcraft.common.blocks.tile.EnergyCollectorBlockEntity;
 import com.shinoow.abyssalcraft.common.blocks.tile.EngraverBlockEntity;
 import com.shinoow.abyssalcraft.common.blocks.tile.EnergyContainerBlockEntity;
 import com.shinoow.abyssalcraft.common.blocks.tile.RitualAltarBlockEntity;
+import com.shinoow.abyssalcraft.common.blocks.tile.SacrificialAltarBlockEntity;
 import com.shinoow.abyssalcraft.common.blocks.tile.TransmutatorBlockEntity;
 
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -68,6 +69,11 @@ public final class ACBlockEntities {
     public static final RegistryObject<BlockEntityType<CrateBlockEntity>> CRATE =
             ACRegistries.BLOCK_ENTITIES.register("crate", () -> BlockEntityType.Builder
                     .of(CrateBlockEntity::new, ACBlocks.wooden_crate.get())
+                    .build(null));
+
+    public static final RegistryObject<BlockEntityType<SacrificialAltarBlockEntity>> SACRIFICIAL_ALTAR =
+            ACRegistries.BLOCK_ENTITIES.register("sacrificial_altar", () -> BlockEntityType.Builder
+                    .of(SacrificialAltarBlockEntity::new, ACBlocks.sacrificial_altar.get())
                     .build(null));
 
     private ACBlockEntities() {}

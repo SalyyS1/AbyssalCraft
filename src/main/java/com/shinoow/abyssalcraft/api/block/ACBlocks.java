@@ -22,12 +22,14 @@ import com.shinoow.abyssalcraft.common.blocks.tile.CrystallizerBlockEntity;
 import com.shinoow.abyssalcraft.common.blocks.tile.EnergyCollectorBlockEntity;
 import com.shinoow.abyssalcraft.common.blocks.tile.EnergyContainerBlockEntity;
 import com.shinoow.abyssalcraft.common.blocks.tile.RitualAltarBlockEntity;
+import com.shinoow.abyssalcraft.common.blocks.tile.SacrificialAltarBlockEntity;
 import com.shinoow.abyssalcraft.common.blocks.tile.TransmutatorBlockEntity;
 import com.shinoow.abyssalcraft.init.ACBlockEntities;
 import com.shinoow.abyssalcraft.init.ACRegistries;
 
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.DropExperienceBlock;
 import net.minecraft.world.level.block.RotatedPillarBlock;
@@ -155,6 +157,12 @@ public class ACBlocks {
     public static final RegistryObject<Block> energy_collector = register("energy_collector",
             () -> new EnergyBlock(ACBlockProperties.stone(3.0F, 6.0F, MapColor.COLOR_PURPLE),
                     EnergyCollectorBlockEntity::new));
+    /** Collects PE from mobs dying nearby, so unlike the passive stores it needs a ticker. */
+    public static final RegistryObject<Block> sacrificial_altar = register("sacrificial_altar",
+            () -> new EnergyBlock(ACBlockProperties.stone(3.0F, 6.0F, MapColor.COLOR_RED),
+                    SacrificialAltarBlockEntity::new,
+                    () -> ACBlockEntities.SACRIFICIAL_ALTAR.get(),
+                    SacrificialAltarBlockEntity::serverTick));
     public static final RegistryObject<Block> energy_container = register("energy_container",
             () -> new EnergyBlock(ACBlockProperties.stone(3.0F, 6.0F, MapColor.COLOR_PURPLE),
                     EnergyContainerBlockEntity::new));

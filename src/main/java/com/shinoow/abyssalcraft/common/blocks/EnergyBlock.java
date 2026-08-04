@@ -12,8 +12,12 @@
 package com.shinoow.abyssalcraft.common.blocks;
 
 import java.util.function.BiFunction;
+import java.util.function.Supplier;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -28,10 +32,37 @@ import net.minecraft.world.level.block.state.BlockState;
 public class EnergyBlock extends BaseEntityBlock {
 
     private final BiFunction<BlockPos, BlockState, BlockEntity> factory;
+    private final Supplier<? extends BlockEntityType<? extends BlockEntity>> expectedType;
+    private final BlockEntityTicker<? extends BlockEntity> tickMethod;
 
     public EnergyBlock(Properties properties, BiFunction<BlockPos, BlockState, BlockEntity> factory) {
+        this(properties, factory, null, null);
+    }
+
+    /**
+     * @param expectedType the block entity type this block ticks; the ticker only runs for a
+     *        matching type, which is what {@code createTickerHelper} checks
+     * @param tickMethod the per-tick method to call
+     */
+    public <E extends BlockEntity> EnergyBlock(Properties properties,
+            BiFunction<BlockPos, BlockState, BlockEntity> factory,
+            Supplier<BlockEntityType<E>> expectedType, BlockEntityTicker<E> tickMethod) {
         super(properties);
         this.factory = factory;
+        this.expectedType = expectedType;
+        this.tickMethod = tickMethod;
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state,
+            BlockEntityType<T> type) {
+        // Only the server ticks; PE amounts reach clients through block updates.
+        if (expectedType == null || level.isClientSide()) {
+            return null;
+        }
+        return createTickerHelper(type, (BlockEntityType<BlockEntity>) expectedType.get(),
+                (BlockEntityTicker<BlockEntity>) tickMethod);
     }
 
     @Override

@@ -102,6 +102,7 @@ final class ACBlockTextures {
         textures.put(ACBlocks.energy_container, "energycontainer");
         textures.put(ACBlocks.ritual_altar, "altar");
         textures.put(ACBlocks.wooden_crate, "crate");
+        textures.put(ACBlocks.sacrificial_altar, "altar");
         return Map.copyOf(textures);
     }
 
