@@ -16,6 +16,8 @@ import com.shinoow.abyssalcraft.client.model.entity.DreadSpawnModel;
 import com.shinoow.abyssalcraft.client.model.entity.DreadlingModel;
 import com.shinoow.abyssalcraft.client.model.entity.ShadowCreatureModel;
 import com.shinoow.abyssalcraft.client.model.entity.ShadowMonsterModel;
+import com.shinoow.abyssalcraft.client.gui.CrystallizerScreen;
+import com.shinoow.abyssalcraft.client.gui.TransmutatorScreen;
 import com.shinoow.abyssalcraft.client.render.ACModelLayers;
 import com.shinoow.abyssalcraft.client.render.entity.AbyssalZombieRenderer;
 import com.shinoow.abyssalcraft.client.render.entity.DepthsGhoulRenderer;
@@ -25,12 +27,15 @@ import com.shinoow.abyssalcraft.client.render.entity.ShadowCreatureRenderer;
 import com.shinoow.abyssalcraft.client.render.entity.ShadowMonsterRenderer;
 import com.shinoow.abyssalcraft.api.item.ACItems;
 import com.shinoow.abyssalcraft.init.ACEntities;
+import com.shinoow.abyssalcraft.init.ACMenus;
 
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.RegisterColorHandlersEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
 /**
  * Client-side setup.
@@ -60,6 +65,15 @@ public final class ACClientSetup {
         event.registerEntityRenderer(ACEntities.DREAD_SPAWN.get(), DreadSpawnRenderer::new);
         event.registerEntityRenderer(ACEntities.ABYSSAL_ZOMBIE.get(), AbyssalZombieRenderer::new);
         event.registerEntityRenderer(ACEntities.DEPTHS_GHOUL.get(), DepthsGhoulRenderer::new);
+    }
+
+    /** Binds each menu type to the screen that draws it. */
+    @SubscribeEvent
+    public static void registerScreens(FMLClientSetupEvent event) {
+        event.enqueueWork(() -> {
+            MenuScreens.register(ACMenus.CRYSTALLIZER.get(), CrystallizerScreen::new);
+            MenuScreens.register(ACMenus.TRANSMUTATOR.get(), TransmutatorScreen::new);
+        });
     }
 
     /**

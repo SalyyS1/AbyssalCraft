@@ -21,3 +21,6 @@ src/generated/
 # JVM crash dumps
 hs_err_pid*.log
 replay_pid*.log
+
+# Claude Terminal local state
+.claude-terminal/
