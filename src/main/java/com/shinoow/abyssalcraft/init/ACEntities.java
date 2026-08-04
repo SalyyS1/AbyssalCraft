@@ -12,10 +12,16 @@
 package com.shinoow.abyssalcraft.init;
 
 import com.shinoow.abyssalcraft.AbyssalCraft;
+import com.shinoow.abyssalcraft.common.entity.AbyssalZombie;
 import com.shinoow.abyssalcraft.common.entity.DepthsGhoul;
+import com.shinoow.abyssalcraft.common.entity.DreadSpawn;
+import com.shinoow.abyssalcraft.common.entity.Dreadling;
+import com.shinoow.abyssalcraft.common.entity.ShadowCreature;
+import com.shinoow.abyssalcraft.common.entity.ShadowMonster;
 
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
+import net.minecraft.world.entity.monster.Monster;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.registries.RegistryObject;
 
@@ -31,16 +37,37 @@ import net.minecraftforge.registries.RegistryObject;
 public final class ACEntities {
 
     public static final RegistryObject<EntityType<DepthsGhoul>> DEPTHS_GHOUL =
-            ACRegistries.ENTITIES.register("depthsghoul", () -> EntityType.Builder
-                    .of(DepthsGhoul::new, MobCategory.MONSTER)
-                    .sized(1.0F, 3.0F)
-                    .clientTrackingRange(4)
-                    .build(AbyssalCraft.MOD_ID + ":depthsghoul"));
+            monster("depthsghoul", DepthsGhoul::new, 1.0F, 3.0F);
+    public static final RegistryObject<EntityType<AbyssalZombie>> ABYSSAL_ZOMBIE =
+            monster("abyssalzombie", AbyssalZombie::new, 0.6F, 1.8F);
+    public static final RegistryObject<EntityType<Dreadling>> DREADLING =
+            monster("dreadling", Dreadling::new, 0.8F, 1.5F);
+    public static final RegistryObject<EntityType<DreadSpawn>> DREAD_SPAWN =
+            monster("dreadspawn", DreadSpawn::new, 0.6F, 0.6F);
+    public static final RegistryObject<EntityType<ShadowCreature>> SHADOW_CREATURE =
+            monster("shadowcreature", ShadowCreature::new, 0.5F, 1.0F);
+    /** 1.12.2 never called setSize on the Shadow Monster, leaving the vanilla 0.6x1.8 default. */
+    public static final RegistryObject<EntityType<ShadowMonster>> SHADOW_MONSTER =
+            monster("shadowmonster", ShadowMonster::new, 0.6F, 1.8F);
 
     private ACEntities() {}
 
+    private static <T extends Monster> RegistryObject<EntityType<T>> monster(String name,
+            EntityType.EntityFactory<T> factory, float width, float height) {
+        return ACRegistries.ENTITIES.register(name, () -> EntityType.Builder
+                .of(factory, MobCategory.MONSTER)
+                .sized(width, height)
+                .clientTrackingRange(4)
+                .build(AbyssalCraft.MOD_ID + ":" + name));
+    }
+
     public static void registerAttributes(EntityAttributeCreationEvent event) {
         event.put(DEPTHS_GHOUL.get(), DepthsGhoul.createAttributes().build());
+        event.put(ABYSSAL_ZOMBIE.get(), AbyssalZombie.createAttributes().build());
+        event.put(DREADLING.get(), Dreadling.createAttributes().build());
+        event.put(DREAD_SPAWN.get(), DreadSpawn.createAttributes().build());
+        event.put(SHADOW_CREATURE.get(), ShadowCreature.createAttributes().build());
+        event.put(SHADOW_MONSTER.get(), ShadowMonster.createAttributes().build());
     }
 
     /** Forces class initialisation so the fields above reach the DeferredRegister. */
