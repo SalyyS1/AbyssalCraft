@@ -32,6 +32,9 @@ import com.shinoow.abyssalcraft.common.entity.demon.EvilCow;
 import com.shinoow.abyssalcraft.common.entity.demon.EvilPig;
 import com.shinoow.abyssalcraft.common.entity.demon.EvilChicken;
 import com.shinoow.abyssalcraft.common.entity.demon.EvilSheep;
+import com.shinoow.abyssalcraft.common.entity.anti.AntiAbyssalZombie;
+import com.shinoow.abyssalcraft.common.entity.anti.AntiGhoul;
+import com.shinoow.abyssalcraft.common.entity.anti.AntiSpider;
 import com.shinoow.abyssalcraft.common.entity.AbyssalZombie;
 import com.shinoow.abyssalcraft.common.entity.DepthsGhoul;
 import com.shinoow.abyssalcraft.common.entity.DreadSpawn;
@@ -117,6 +120,13 @@ public final class ACEntities {
     public static final RegistryObject<EntityType<EvilSheep>> EVIL_SHEEP =
             monster("evilsheep", EvilSheep::new, 0.9F, 1.3F);
 
+    public static final RegistryObject<EntityType<AntiAbyssalZombie>> ANTI_ABYSSAL_ZOMBIE =
+            monster("antiabyssalzombie", AntiAbyssalZombie::new, 0.6F, 1.8F);
+    public static final RegistryObject<EntityType<AntiGhoul>> ANTI_GHOUL =
+            monster("antighoul", AntiGhoul::new, 1.0F, 3.0F);
+    public static final RegistryObject<EntityType<AntiSpider>> ANTI_SPIDER =
+            monster("antispider", AntiSpider::new, 1.4F, 0.9F);
+
     private ACEntities() {}
 
     private static <T extends Monster> RegistryObject<EntityType<T>> monster(String name,
@@ -139,6 +149,9 @@ public final class ACEntities {
     }
 
     public static void registerAttributes(EntityAttributeCreationEvent event) {
+        event.put(ANTI_ABYSSAL_ZOMBIE.get(), AntiAbyssalZombie.createAttributes().build());
+        event.put(ANTI_GHOUL.get(), AntiGhoul.createAttributes().build());
+        event.put(ANTI_SPIDER.get(), AntiSpider.createAttributes().build());
         event.put(DEMON_COW.get(), DemonCow.createAttributes().build());
         event.put(DEMON_PIG.get(), DemonPig.createAttributes().build());
         event.put(DEMON_CHICKEN.get(), DemonChicken.createAttributes().build());
