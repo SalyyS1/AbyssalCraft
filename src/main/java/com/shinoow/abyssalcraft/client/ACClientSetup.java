@@ -27,6 +27,8 @@ import com.shinoow.abyssalcraft.client.render.entity.DreadGolemRenderer;
 import com.shinoow.abyssalcraft.client.render.entity.OmotholGhoulRenderer;
 import com.shinoow.abyssalcraft.client.render.entity.GatekeeperMinionRenderer;
 import com.shinoow.abyssalcraft.client.render.entity.ShadowBeastRenderer;
+import com.shinoow.abyssalcraft.client.render.entity.DreadguardRenderer;
+import com.shinoow.abyssalcraft.client.render.entity.SkeletonGoliathRenderer;
 import com.shinoow.abyssalcraft.client.render.entity.AbyssalZombieRenderer;
 import com.shinoow.abyssalcraft.client.render.entity.DepthsGhoulRenderer;
 import com.shinoow.abyssalcraft.client.render.entity.DreadSpawnRenderer;
@@ -73,6 +75,8 @@ public final class ACClientSetup {
         event.registerEntityRenderer(ACEntities.DREAD_SPAWN.get(), DreadSpawnRenderer::new);
         event.registerEntityRenderer(ACEntities.ABYSSAL_ZOMBIE.get(), AbyssalZombieRenderer::new);
         event.registerEntityRenderer(ACEntities.DEPTHS_GHOUL.get(), DepthsGhoulRenderer::new);
+        event.registerEntityRenderer(ACEntities.DREADGUARD.get(), DreadguardRenderer::new);
+        event.registerEntityRenderer(ACEntities.SKELETON_GOLIATH.get(), SkeletonGoliathRenderer::new);
         event.registerEntityRenderer(ACEntities.OMOTHOL_GHOUL.get(), OmotholGhoulRenderer::new);
         event.registerEntityRenderer(ACEntities.GATEKEEPER_MINION.get(), GatekeeperMinionRenderer::new);
         event.registerEntityRenderer(ACEntities.SHADOW_BEAST.get(), ShadowBeastRenderer::new);
