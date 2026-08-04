@@ -27,8 +27,9 @@ import net.minecraft.world.level.Level;
  * {@code applyEntityAttributes} and picked one of two stat pairs. Attributes are baked into the
  * {@link EntityType} on 1.20.1 and so are fixed before any config-dependent choice can be made;
  * the hardcore values are therefore applied to the instance on spawn. Subclasses declare their
- * hardcore stats by overriding {@link #getHardcoreHealth()} and {@link #getHardcoreDamage()},
- * which keeps that branch in one place instead of repeated across every mob.
+ * hardcore stats by overriding {@link #getHardcoreHealth()}, {@link #getHardcoreDamage()} and
+ * {@link #getHardcoreFollowRange()}, which keeps that branch in one place instead of repeated
+ * across every mob.
  */
 public abstract class ACMonster extends Monster {
 
@@ -46,6 +47,14 @@ public abstract class ACMonster extends Monster {
         return Double.NaN;
     }
 
+    /**
+     * Follow range in hardcore mode; NaN means unchanged. A few mobs, such as the Anti Zombie,
+     * track the player from twice as far in hardcore rather than only hitting harder.
+     */
+    protected double getHardcoreFollowRange() {
+        return Double.NaN;
+    }
+
     @Override
     public void onAddedToWorld() {
         super.onAddedToWorld();
@@ -54,6 +63,7 @@ public abstract class ACMonster extends Monster {
         }
         boolean healthChanged = setAttributeBase(Attributes.MAX_HEALTH, getHardcoreHealth());
         setAttributeBase(Attributes.ATTACK_DAMAGE, getHardcoreDamage());
+        setAttributeBase(Attributes.FOLLOW_RANGE, getHardcoreFollowRange());
         if (healthChanged) {
             setHealth(getMaxHealth());
         }

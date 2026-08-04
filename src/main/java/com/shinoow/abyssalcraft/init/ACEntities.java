@@ -19,6 +19,8 @@ import com.shinoow.abyssalcraft.common.entity.GatekeeperMinion;
 import com.shinoow.abyssalcraft.common.entity.ShadowBeast;
 import com.shinoow.abyssalcraft.common.entity.Dreadguard;
 import com.shinoow.abyssalcraft.common.entity.SkeletonGoliath;
+import com.shinoow.abyssalcraft.common.entity.anti.AntiZombie;
+import com.shinoow.abyssalcraft.common.entity.anti.AntiSkeleton;
 import com.shinoow.abyssalcraft.common.entity.AbyssalZombie;
 import com.shinoow.abyssalcraft.common.entity.DepthsGhoul;
 import com.shinoow.abyssalcraft.common.entity.DreadSpawn;
@@ -74,6 +76,11 @@ public final class ACEntities {
     public static final RegistryObject<EntityType<SkeletonGoliath>> SKELETON_GOLIATH =
             monster("skeletongoliath", SkeletonGoliath::new, 1.0F, 4.5F);
 
+    public static final RegistryObject<EntityType<AntiZombie>> ANTI_ZOMBIE =
+            monster("antizombie", AntiZombie::new, 0.6F, 1.8F);
+    public static final RegistryObject<EntityType<AntiSkeleton>> ANTI_SKELETON =
+            monster("antiskeleton", AntiSkeleton::new, 0.6F, 1.99F);
+
     private ACEntities() {}
 
     private static <T extends Monster> RegistryObject<EntityType<T>> monster(String name,
@@ -86,6 +93,8 @@ public final class ACEntities {
     }
 
     public static void registerAttributes(EntityAttributeCreationEvent event) {
+        event.put(ANTI_ZOMBIE.get(), AntiZombie.createAttributes().build());
+        event.put(ANTI_SKELETON.get(), AntiSkeleton.createAttributes().build());
         event.put(DREADGUARD.get(), Dreadguard.createAttributes().build());
         event.put(SKELETON_GOLIATH.get(), SkeletonGoliath.createAttributes().build());
         event.put(OMOTHOL_GHOUL.get(), OmotholGhoul.createAttributes().build());
