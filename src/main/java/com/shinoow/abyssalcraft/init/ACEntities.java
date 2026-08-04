@@ -24,6 +24,14 @@ import com.shinoow.abyssalcraft.common.entity.anti.AntiSkeleton;
 import com.shinoow.abyssalcraft.common.entity.anti.AntiCow;
 import com.shinoow.abyssalcraft.common.entity.anti.AntiPig;
 import com.shinoow.abyssalcraft.common.entity.anti.AntiChicken;
+import com.shinoow.abyssalcraft.common.entity.demon.DemonCow;
+import com.shinoow.abyssalcraft.common.entity.demon.DemonPig;
+import com.shinoow.abyssalcraft.common.entity.demon.DemonChicken;
+import com.shinoow.abyssalcraft.common.entity.demon.DemonSheep;
+import com.shinoow.abyssalcraft.common.entity.demon.EvilCow;
+import com.shinoow.abyssalcraft.common.entity.demon.EvilPig;
+import com.shinoow.abyssalcraft.common.entity.demon.EvilChicken;
+import com.shinoow.abyssalcraft.common.entity.demon.EvilSheep;
 import com.shinoow.abyssalcraft.common.entity.AbyssalZombie;
 import com.shinoow.abyssalcraft.common.entity.DepthsGhoul;
 import com.shinoow.abyssalcraft.common.entity.DreadSpawn;
@@ -92,6 +100,23 @@ public final class ACEntities {
     public static final RegistryObject<EntityType<AntiChicken>> ANTI_CHICKEN =
             animal("antichicken", AntiChicken::new, 0.3F, 0.7F);
 
+    public static final RegistryObject<EntityType<DemonCow>> DEMON_COW =
+            monster("demoncow", DemonCow::new, 0.9F, 1.3F);
+    public static final RegistryObject<EntityType<DemonPig>> DEMON_PIG =
+            monster("demonpig", DemonPig::new, 0.9F, 0.9F);
+    public static final RegistryObject<EntityType<DemonChicken>> DEMON_CHICKEN =
+            monster("demonchicken", DemonChicken::new, 0.3F, 0.7F);
+    public static final RegistryObject<EntityType<DemonSheep>> DEMON_SHEEP =
+            monster("demonsheep", DemonSheep::new, 0.9F, 1.3F);
+    public static final RegistryObject<EntityType<EvilCow>> EVIL_COW =
+            monster("evilcow", EvilCow::new, 0.9F, 1.3F);
+    public static final RegistryObject<EntityType<EvilPig>> EVIL_PIG =
+            monster("evilpig", EvilPig::new, 0.9F, 0.9F);
+    public static final RegistryObject<EntityType<EvilChicken>> EVIL_CHICKEN =
+            monster("evilchicken", EvilChicken::new, 0.3F, 0.7F);
+    public static final RegistryObject<EntityType<EvilSheep>> EVIL_SHEEP =
+            monster("evilsheep", EvilSheep::new, 0.9F, 1.3F);
+
     private ACEntities() {}
 
     private static <T extends Monster> RegistryObject<EntityType<T>> monster(String name,
@@ -114,6 +139,14 @@ public final class ACEntities {
     }
 
     public static void registerAttributes(EntityAttributeCreationEvent event) {
+        event.put(DEMON_COW.get(), DemonCow.createAttributes().build());
+        event.put(DEMON_PIG.get(), DemonPig.createAttributes().build());
+        event.put(DEMON_CHICKEN.get(), DemonChicken.createAttributes().build());
+        event.put(DEMON_SHEEP.get(), DemonSheep.createAttributes().build());
+        event.put(EVIL_COW.get(), EvilCow.createAttributes().build());
+        event.put(EVIL_PIG.get(), EvilPig.createAttributes().build());
+        event.put(EVIL_CHICKEN.get(), EvilChicken.createAttributes().build());
+        event.put(EVIL_SHEEP.get(), EvilSheep.createAttributes().build());
         event.put(ANTI_COW.get(), AntiCow.createAttributes().build());
         event.put(ANTI_PIG.get(), AntiPig.createAttributes().build());
         event.put(ANTI_CHICKEN.get(), AntiChicken.createAttributes().build());
