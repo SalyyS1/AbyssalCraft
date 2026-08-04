@@ -20,6 +20,7 @@ import com.shinoow.abyssalcraft.init.ACBlockEntities;
 import com.shinoow.abyssalcraft.init.ACEntities;
 import com.shinoow.abyssalcraft.init.ACMenus;
 import com.shinoow.abyssalcraft.init.ACRegistries;
+import com.shinoow.abyssalcraft.init.ACRituals;
 import com.shinoow.abyssalcraft.lib.ACConfig;
 import com.shinoow.abyssalcraft.lib.ACConfigSpec;
 import com.shinoow.abyssalcraft.lib.ACTabs;
@@ -69,6 +70,7 @@ public class AbyssalCraft {
     private void commonSetup(FMLCommonSetupEvent event) {
         event.enqueueWork(AbyssalCrafting::init);
         event.enqueueWork(ACConditionProcessors::register);
+        event.enqueueWork(ACRituals::register);
     }
 
     /** Replaces the 1.12.2 {@code @SidedProxy} split. */

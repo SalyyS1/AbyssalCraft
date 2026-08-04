@@ -18,6 +18,7 @@ import com.shinoow.abyssalcraft.common.blocks.CrystallizerBlock;
 import com.shinoow.abyssalcraft.common.blocks.EnergyBlock;
 import com.shinoow.abyssalcraft.common.blocks.tile.EnergyCollectorBlockEntity;
 import com.shinoow.abyssalcraft.common.blocks.tile.EnergyContainerBlockEntity;
+import com.shinoow.abyssalcraft.common.blocks.tile.RitualAltarBlockEntity;
 import com.shinoow.abyssalcraft.init.ACRegistries;
 
 import net.minecraft.world.item.BlockItem;
@@ -137,6 +138,11 @@ public class ACBlocks {
     public static final RegistryObject<Block> energy_container = register("energy_container",
             () -> new EnergyBlock(ACBlockProperties.stone(3.0F, 6.0F, MapColor.COLOR_PURPLE),
                     EnergyContainerBlockEntity::new));
+
+    // ---- Rituals ----
+    public static final RegistryObject<Block> ritual_altar = register("ritual_altar",
+            () -> new EnergyBlock(ACBlockProperties.stone(3.0F, 6.0F, MapColor.COLOR_BLACK),
+                    RitualAltarBlockEntity::new));
 
     private ACBlocks() {}
 

@@ -23,12 +23,16 @@ import com.shinoow.abyssalcraft.api.necronomicon.condition.DimensionCondition;
 import com.shinoow.abyssalcraft.api.necronomicon.condition.caps.NecroDataCapability;
 import com.shinoow.abyssalcraft.api.recipe.CrystallizerRecipes;
 import com.shinoow.abyssalcraft.api.recipe.TransmutatorRecipes;
+import com.shinoow.abyssalcraft.api.ritual.NecronomiconRitual;
+import com.shinoow.abyssalcraft.api.ritual.RitualRegistry;
 import com.shinoow.abyssalcraft.common.blocks.tile.EnergyContainerBlockEntity;
 import com.shinoow.abyssalcraft.init.ACEntities;
+import com.shinoow.abyssalcraft.lib.ACLib;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.Level;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -59,15 +63,51 @@ public final class ACPortSelfCheck {
         int entities = checkEntities(event, problems);
         checkEnergyStorage(problems);
         checkKnowledgeGating(problems);
+        int rituals = checkRituals(problems);
 
         if (problems.isEmpty()) {
-            ACLogger.info("Port self-check: {} blocks, {} items, {} machine recipes and {} entities resolved; PE storage and Necronomicon gating OK.",
-                    blocks, items, recipes, entities);
+            ACLogger.info("Port self-check: {} blocks, {} items, {} machine recipes, {} entities and {} rituals resolved; PE storage and Necronomicon gating OK.",
+                    blocks, items, recipes, entities, rituals);
         } else {
-            ACLogger.severe("Port self-check: {} problems across {} blocks, {} items, {} recipes and {} entities:",
-                    problems.size(), blocks, items, recipes, entities);
+            ACLogger.severe("Port self-check: {} problems across {} blocks, {} items, {} recipes, {} entities and {} rituals:",
+                    problems.size(), blocks, items, recipes, entities, rituals);
             problems.forEach(problem -> ACLogger.severe("  {}", problem));
         }
+    }
+
+    /**
+     * Checks each registered ritual declares a usable shape, and that the dimension-to-book-tier
+     * gate actually refuses a lower-tier book. That gate is what keeps late-game rituals out of
+     * reach early, so a permissive bug there collapses the progression.
+     */
+    private static int checkRituals(List<String> problems) {
+        List<NecronomiconRitual> rituals = RitualRegistry.instance().getRituals();
+
+        for (NecronomiconRitual ritual : rituals) {
+            if (ritual.getOfferings().length > NecronomiconRitual.MAX_OFFERINGS) {
+                problems.add("ritual " + ritual.getUnlocalizedName() + " declares more offerings than pedestals");
+            }
+            if (ritual.getBookType() < 0 || ritual.getBookType() > RitualRegistry.MAX_BOOK_TYPE) {
+                problems.add("ritual " + ritual.getUnlocalizedName() + " has out-of-range book type "
+                        + ritual.getBookType());
+            }
+            if (ritual.getReqEnergy() < 0.0F) {
+                problems.add("ritual " + ritual.getUnlocalizedName() + " requires negative energy");
+            }
+        }
+
+        RitualRegistry registry = RitualRegistry.instance();
+        if (!registry.canPerformAction(ACLib.THE_DARK_REALM, 4)) {
+            problems.add("rituals: a tier-4 book cannot act in the Dark Realm");
+        }
+        if (registry.canPerformAction(ACLib.THE_DARK_REALM, 3)) {
+            problems.add("rituals: a tier-3 book was allowed to act in the Dark Realm");
+        }
+        if (!registry.canPerformAction(Level.OVERWORLD, 0)) {
+            problems.add("rituals: a tier-0 book cannot act in the Overworld");
+        }
+
+        return rituals.size();
     }
 
     /**
