@@ -12,6 +12,8 @@
 package com.shinoow.abyssalcraft.init;
 
 import com.shinoow.abyssalcraft.AbyssalCraft;
+import com.shinoow.abyssalcraft.common.entity.AbyssalniteGolem;
+import com.shinoow.abyssalcraft.common.entity.DreadGolem;
 import com.shinoow.abyssalcraft.common.entity.AbyssalZombie;
 import com.shinoow.abyssalcraft.common.entity.DepthsGhoul;
 import com.shinoow.abyssalcraft.common.entity.DreadSpawn;
@@ -50,6 +52,11 @@ public final class ACEntities {
     public static final RegistryObject<EntityType<ShadowMonster>> SHADOW_MONSTER =
             monster("shadowmonster", ShadowMonster::new, 0.6F, 1.8F);
 
+    public static final RegistryObject<EntityType<AbyssalniteGolem>> ABYSSALNITE_GOLEM =
+            monster("abygolem", AbyssalniteGolem::new, 0.6F, 1.8F);
+    public static final RegistryObject<EntityType<DreadGolem>> DREAD_GOLEM =
+            monster("dreadgolem", DreadGolem::new, 0.6F, 1.8F);
+
     private ACEntities() {}
 
     private static <T extends Monster> RegistryObject<EntityType<T>> monster(String name,
@@ -62,6 +69,8 @@ public final class ACEntities {
     }
 
     public static void registerAttributes(EntityAttributeCreationEvent event) {
+        event.put(ABYSSALNITE_GOLEM.get(), AbyssalniteGolem.createGolemAttributes().build());
+        event.put(DREAD_GOLEM.get(), DreadGolem.createGolemAttributes().build());
         event.put(DEPTHS_GHOUL.get(), DepthsGhoul.createAttributes().build());
         event.put(ABYSSAL_ZOMBIE.get(), AbyssalZombie.createAttributes().build());
         event.put(DREADLING.get(), Dreadling.createAttributes().build());

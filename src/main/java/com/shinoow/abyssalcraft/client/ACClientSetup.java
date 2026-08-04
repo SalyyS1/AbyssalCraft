@@ -22,6 +22,8 @@ import com.shinoow.abyssalcraft.client.gui.MaterializerScreen;
 import com.shinoow.abyssalcraft.client.gui.StateTransformerScreen;
 import com.shinoow.abyssalcraft.client.gui.TransmutatorScreen;
 import com.shinoow.abyssalcraft.client.render.ACModelLayers;
+import com.shinoow.abyssalcraft.client.render.entity.AbyssalniteGolemRenderer;
+import com.shinoow.abyssalcraft.client.render.entity.DreadGolemRenderer;
 import com.shinoow.abyssalcraft.client.render.entity.AbyssalZombieRenderer;
 import com.shinoow.abyssalcraft.client.render.entity.DepthsGhoulRenderer;
 import com.shinoow.abyssalcraft.client.render.entity.DreadSpawnRenderer;
@@ -68,6 +70,8 @@ public final class ACClientSetup {
         event.registerEntityRenderer(ACEntities.DREAD_SPAWN.get(), DreadSpawnRenderer::new);
         event.registerEntityRenderer(ACEntities.ABYSSAL_ZOMBIE.get(), AbyssalZombieRenderer::new);
         event.registerEntityRenderer(ACEntities.DEPTHS_GHOUL.get(), DepthsGhoulRenderer::new);
+        event.registerEntityRenderer(ACEntities.ABYSSALNITE_GOLEM.get(), AbyssalniteGolemRenderer::new);
+        event.registerEntityRenderer(ACEntities.DREAD_GOLEM.get(), DreadGolemRenderer::new);
     }
 
     /** Binds each menu type to the screen that draws it. */
