@@ -189,6 +189,18 @@ final class ACItemTextures {
         // The nugget was a metadata item on 1.12.2 with one sprite per metal; the abyssalnite one
         // stands in until those variants are split into separate items.
         textures.put(ACItems.ingot_nugget, "nugget_abyssalnite");
+        // Items whose 1.12.2 model file was absent or held metadata variants. Each texture below
+        // was confirmed present; the variant items themselves are split in a later phase, so these
+        // point at the base sprite for now.
+        textures.put(ACItems.coralium_pearl, "cp");
+        textures.put(ACItems.ritual_charm, "charm");
+        textures.put(ACItems.skin, "skin_abyssalwasteland");
+        textures.put(ACItems.essence, "essence_abyssalwasteland");
+        textures.put(ACItems.shoggoth_flesh, "shoggothflesh_overworld");
+        textures.put(ACItems.configurator_shard, "configurator/configurator_shard_0");
+        textures.put(ACItems.scroll, "scrolls/scroll_basic");
+        textures.put(ACItems.unique_scroll, "scrolls/scroll_unique_anti");
+        textures.put(ACItems.antidote, "coralium_antidote");
         return Map.copyOf(textures);
     }
 

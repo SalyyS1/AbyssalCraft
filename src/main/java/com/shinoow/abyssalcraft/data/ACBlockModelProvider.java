@@ -57,6 +57,12 @@ public class ACBlockModelProvider extends BlockStateProvider {
             simpleBlockItem(block, model);
         }
 
+        // Solid Lava reused the vanilla lava sprite on 1.12.2 rather than shipping its own, so its
+        // model points outside the mod's namespace and cannot come from the mod texture table.
+        Block solidLava = ACBlocks.solid_lava.get();
+        simpleBlockWithItem(solidLava, models().cubeAll(name(solidLava),
+                new ResourceLocation("minecraft", "block/lava_still")));
+
         // The machines face the player and show a lit front when running, so each needs an
         // oriented model per state rather than a single cube.
         machine(ACBlocks.crystallizer_idle.get(), "crystallizer", "crystallizer_front_off");

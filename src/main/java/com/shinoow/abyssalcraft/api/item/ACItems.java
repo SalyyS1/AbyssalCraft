@@ -222,7 +222,6 @@ public class ACItems {
     public static final RegistryObject<Item> antidote = simple("antidote");
     public static final RegistryObject<Item> crystal_shard = simple("crystal_shard");
     public static final RegistryObject<Item> configurator_shard = simple("configurator_shard");
-    public static final RegistryObject<Item> shadow_titan_armor_plate = simple("shadow_titan_armor_plate");
     public static final RegistryObject<Item> powerstone_tracker = simple("powerstone_tracker");
     public static final RegistryObject<Item> eye_of_the_abyss = simple("eye_of_the_abyss");
     public static final RegistryObject<Item> oblivion_catalyst = simple("oblivion_catalyst");
