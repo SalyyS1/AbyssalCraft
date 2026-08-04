@@ -169,47 +169,27 @@ dependency graph: nothing compiles until registries and the mod entrypoint exist
 - **Gate met:** self-check caught a real duplicate-registration crash
   (`ethaxium_brick` block vs item) before it reached gameplay.
 
-**Phase 04 — machines and recipes: PARTIAL (Crystallizer done, verified).**
-- `BlockEntity` + `MenuType` + `ContainerData` replace `TileEntity` +
-  `IGuiHandler` + `IContainerListener`.
-- Crystallizer and Transmutator recipe registries stay runtime registries so
-  addon mods keep working; 47 recipes registered.
+**Phase 04 — machines and recipes: PARTIAL (2 of 9, verified).**
+- Crystallizer and Transmutator, both with working menus, screens and oriented
+  models with a lit front while running.
+- Three base classes hold what 1.12.2 duplicated per machine: the tick loop and
+  inventory, the slot sync and quick-move rules, and the block behaviour.
+- 47 machine recipes registered; registries stay runtime so addons keep working.
 - **Gate met:** every recipe resolves through the machine's own lookup path.
-- **Remaining:** Transmutator, Engraver, Materializer, State Transformer,
-  Rending Pedestal, Sacrificial Altar, Spirit Altar, Crate.
+- **Remaining:** Engraver, Materializer, State Transformer, Rending Pedestal,
+  Sacrificial Altar, Spirit Altar, Crate.
 
-**Phase 05 — entities: PARTIAL (6 of 46, verified).**
-- Depths Ghoul, Abyssal Zombie, Dreadling, Dread Spawn, Shadow Creature,
-  Shadow Monster. Three base classes absorb the shared AI and the hardcore-mode
-  stat swap, which had to move to spawn time.
-- **Gate met:** every type constructs against the overworld with valid attributes.
+**Phase 06 — rendering: DONE for ported content (verified).**
+- All 6 mobs render. 4 entity models converted mechanically from the 1.12.2
+  constructors by `convert_legacy_entity_model.py`; the 2 humanoids reuse vanilla
+  layers, as they did before.
+- 58 blockstates, 58 block models and 266 item models generated from a texture
+  mapping table, because the 1.12.2 assets are abbreviated and are left untouched
+  (they are All Rights Reserved).
+- 28 crystal types tint one shared greyscale sprite, as before.
+- **Gate met:** client boots with **0 missing models and 0 missing textures**.
 
-**Phase 08 — Potential Energy: PARTIAL (API + 2 blocks, verified).**
-- Interfaces, deity/amplifier enums, `PEUtils`, collector and container.
-- Transfer radius, 20-collector cap, 1-in-120 tick chance and tolerance rules
-  all preserved.
-- `EnumHelper`-based runtime enum extension is gone (Java 17 forbids it).
-- **Gate met:** storage clamping, over-drain and full/empty flags verified.
-- **Remaining:** relays, pedestals, tiered variants, 13 disruption types.
-
-**Phase 09 — rituals: PARTIAL (framework + 2 rituals, verified).**
-- Base class, registry, creation and weather rituals, ritual altar.
-- Numeric dimension IDs become nullable `ResourceKey`s.
-- **Gate met:** tier gate admits a tier-4 book to the Dark Realm and refuses
-  tier 3.
-- **Remaining:** 9 more rituals, pedestal multiblock, sacrifice handling.
-
-**Phase 10 — Necronomicon progression: DONE (API verified).**
-- Knowledge tree, 8 condition types, per-player progress capability.
-- Condition type IDs unchanged (saved progress keys off them); condition targets
-  become `ResourceLocation`s.
-- **Gate met:** locked before trigger, unlocked after, survives save/load,
-  overridden by unlock-all.
-
-**Not started:** phases 06–07, 11–17 (renderers/models, networking, spells,
-biomes, dimensions, structures, potions/enchants, JEI, playthrough validation).
-The remaining Java lives uncompiled in `src/legacy/` and on `legacy-1.12.2`.
-
-## Unresolved questions
-
-- None. All four open questions were resolved above on 2026-08-04.
+**Not started:** phases 11-17 (spells, biomes, dimensions, structures,
+potions/enchants, JEI, playthrough validation), plus the remaining machines,
+40 mobs and ~90 blocks. The remaining Java lives uncompiled in `src/legacy/`
+and on `legacy-1.12.2`.
