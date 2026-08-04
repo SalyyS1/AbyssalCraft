@@ -155,19 +155,60 @@ dependency graph: nothing compiles until registries and the mod entrypoint exist
 - 12 central `DeferredRegister` instances.
 - **Gate met:** `abyssalcraft-common.toml` generates with all categories intact.
 
-**Phase 02 — blocks: PARTIAL (55 of ~151 registered, verified).**
+**Phase 02 — blocks: PARTIAL (60 of ~151 registered, verified).**
 - Stone family (8), cobblestone family (5), brick families (17), ores (14),
-  terrain (9), pillars/glowing (3) — each metadata variant now its own block.
-- `ACPortSelfCheck` asserts every declared block resolves in the live registry
-  with an item form, and runs on every server start.
-- **Gate met:** self-check reports `all 55 registered blocks resolved`.
-- **Remaining in this phase:** ~96 blocks — slabs/stairs/walls/fences, portals,
-  fires, machines, altars, statues, energy blocks, plants, doors, crates.
-  These depend on later phases (block entities, menus) and are blocked until
-  those land.
+  terrain (9), pillars/glowing (3), machines (2), PE blocks (2), ritual altar (1).
+- Each 1.12.2 metadata variant is now its own block.
+- **Gate met:** self-check resolves every block with an item form.
 
-**Not started:** phases 03–17. The Java tree is otherwise still 1.12.2 and lives
-uncompiled in `src/legacy/` (also preserved on the `legacy-1.12.2` branch).
+**Phase 03 — items: DONE (205 registered, verified).**
+- Materials, 5 tool tiers, 8 armor sets, upgrade kits, food, coins, engravings,
+  ritual charms, and 56 crystal/shard items (one per former metadata variant).
+- `EnumHelper.addToolMaterial`/`addArmorMaterial` are gone; `ACItemTier`
+  implements `Tier`, `ACArmorMaterial` implements `ArmorMaterial`.
+- **Gate met:** self-check caught a real duplicate-registration crash
+  (`ethaxium_brick` block vs item) before it reached gameplay.
+
+**Phase 04 — machines and recipes: PARTIAL (Crystallizer done, verified).**
+- `BlockEntity` + `MenuType` + `ContainerData` replace `TileEntity` +
+  `IGuiHandler` + `IContainerListener`.
+- Crystallizer and Transmutator recipe registries stay runtime registries so
+  addon mods keep working; 47 recipes registered.
+- **Gate met:** every recipe resolves through the machine's own lookup path.
+- **Remaining:** Transmutator, Engraver, Materializer, State Transformer,
+  Rending Pedestal, Sacrificial Altar, Spirit Altar, Crate.
+
+**Phase 05 — entities: PARTIAL (6 of 46, verified).**
+- Depths Ghoul, Abyssal Zombie, Dreadling, Dread Spawn, Shadow Creature,
+  Shadow Monster. Three base classes absorb the shared AI and the hardcore-mode
+  stat swap, which had to move to spawn time.
+- **Gate met:** every type constructs against the overworld with valid attributes.
+
+**Phase 08 — Potential Energy: PARTIAL (API + 2 blocks, verified).**
+- Interfaces, deity/amplifier enums, `PEUtils`, collector and container.
+- Transfer radius, 20-collector cap, 1-in-120 tick chance and tolerance rules
+  all preserved.
+- `EnumHelper`-based runtime enum extension is gone (Java 17 forbids it).
+- **Gate met:** storage clamping, over-drain and full/empty flags verified.
+- **Remaining:** relays, pedestals, tiered variants, 13 disruption types.
+
+**Phase 09 — rituals: PARTIAL (framework + 2 rituals, verified).**
+- Base class, registry, creation and weather rituals, ritual altar.
+- Numeric dimension IDs become nullable `ResourceKey`s.
+- **Gate met:** tier gate admits a tier-4 book to the Dark Realm and refuses
+  tier 3.
+- **Remaining:** 9 more rituals, pedestal multiblock, sacrifice handling.
+
+**Phase 10 — Necronomicon progression: DONE (API verified).**
+- Knowledge tree, 8 condition types, per-player progress capability.
+- Condition type IDs unchanged (saved progress keys off them); condition targets
+  become `ResourceLocation`s.
+- **Gate met:** locked before trigger, unlocked after, survives save/load,
+  overridden by unlock-all.
+
+**Not started:** phases 06–07, 11–17 (renderers/models, networking, spells,
+biomes, dimensions, structures, potions/enchants, JEI, playthrough validation).
+The remaining Java lives uncompiled in `src/legacy/` and on `legacy-1.12.2`.
 
 ## Unresolved questions
 
