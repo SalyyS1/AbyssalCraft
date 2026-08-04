@@ -12,6 +12,7 @@
 package com.shinoow.abyssalcraft;
 
 import com.shinoow.abyssalcraft.api.block.ACBlocks;
+import com.shinoow.abyssalcraft.api.item.ACItems;
 import com.shinoow.abyssalcraft.common.util.ACPortSelfCheck;
 import com.shinoow.abyssalcraft.init.ACRegistries;
 import com.shinoow.abyssalcraft.lib.ACConfig;
@@ -41,6 +42,7 @@ public class AbyssalCraft {
 
         ACRegistries.register(modBus);
         ACBlocks.register();
+        ACItems.register();
         ACTabs.register();
 
         modBus.addListener(ACConfig::onConfigLoad);
