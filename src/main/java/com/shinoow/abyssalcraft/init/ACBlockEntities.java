@@ -16,6 +16,7 @@ import com.shinoow.abyssalcraft.common.blocks.tile.CrystallizerBlockEntity;
 import com.shinoow.abyssalcraft.common.blocks.tile.EnergyCollectorBlockEntity;
 import com.shinoow.abyssalcraft.common.blocks.tile.EnergyContainerBlockEntity;
 import com.shinoow.abyssalcraft.common.blocks.tile.RitualAltarBlockEntity;
+import com.shinoow.abyssalcraft.common.blocks.tile.TransmutatorBlockEntity;
 
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.registries.RegistryObject;
@@ -49,6 +50,12 @@ public final class ACBlockEntities {
     public static final RegistryObject<BlockEntityType<RitualAltarBlockEntity>> RITUAL_ALTAR =
             ACRegistries.BLOCK_ENTITIES.register("ritual_altar", () -> BlockEntityType.Builder
                     .of(RitualAltarBlockEntity::new, ACBlocks.ritual_altar.get())
+                    .build(null));
+
+    public static final RegistryObject<BlockEntityType<TransmutatorBlockEntity>> TRANSMUTATOR =
+            ACRegistries.BLOCK_ENTITIES.register("transmutator", () -> BlockEntityType.Builder
+                    .of(TransmutatorBlockEntity::new,
+                            ACBlocks.transmutator_idle.get(), ACBlocks.transmutator_active.get())
                     .build(null));
 
     private ACBlockEntities() {}

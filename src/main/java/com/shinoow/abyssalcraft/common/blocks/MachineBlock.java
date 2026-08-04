@@ -11,18 +11,19 @@
  ******************************************************************************/
 package com.shinoow.abyssalcraft.common.blocks;
 
-import com.shinoow.abyssalcraft.common.blocks.tile.CrystallizerBlockEntity;
-import com.shinoow.abyssalcraft.init.ACBlockEntities;
+import java.util.function.BiFunction;
+import java.util.function.Supplier;
+
+import com.shinoow.abyssalcraft.common.blocks.tile.AbstractMachineBlockEntity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
@@ -37,19 +38,25 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.network.NetworkHooks;
 
 /**
- * The Crystallizer block.
+ * A fuel-burning machine block.
  * <p>
- * On 1.12.2 the active and idle forms were two separate blocks that swapped places as the machine
- * ran, and the GUI opened via {@code IGuiHandler}. The two-block split is kept so existing recipes
- * and JEI entries keep working, but the block now carries a {@code FACING} property instead of
- * baking rotation into metadata, and opens its menu through {@link NetworkHooks}.
+ * 1.12.2 had a near-identical block class per machine, each split into an idle and an active form
+ * that swapped places as the machine ran. The idle/active split is kept so existing recipes and JEI
+ * entries still resolve, but one parameterised class replaces the per-machine duplicates. Rotation
+ * moves from metadata to a {@code FACING} property, and the GUI opens through {@link NetworkHooks}
+ * instead of the removed {@code IGuiHandler}.
  */
-public class CrystallizerBlock extends BaseEntityBlock {
+public class MachineBlock extends BaseEntityBlock {
 
+    private final BiFunction<BlockPos, BlockState, BlockEntity> factory;
+    private final Supplier<BlockEntityType<? extends AbstractMachineBlockEntity>> type;
     private final boolean active;
 
-    public CrystallizerBlock(Properties properties, boolean active) {
+    public MachineBlock(Properties properties, BiFunction<BlockPos, BlockState, BlockEntity> factory,
+            Supplier<BlockEntityType<? extends AbstractMachineBlockEntity>> type, boolean active) {
         super(properties);
+        this.factory = factory;
+        this.type = type;
         this.active = active;
         registerDefaultState(stateDefinition.any().setValue(HorizontalDirectionalBlock.FACING, Direction.NORTH));
     }
@@ -72,14 +79,15 @@ public class CrystallizerBlock extends BaseEntityBlock {
 
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        return new CrystallizerBlockEntity(pos, state);
+        return factory.apply(pos, state);
     }
 
     @Override
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state,
+            BlockEntityType<T> blockEntityType) {
         // Only the server ticks; the client learns about progress through the menu's ContainerData.
         return level.isClientSide() ? null
-                : createTickerHelper(type, ACBlockEntities.CRYSTALLIZER.get(), CrystallizerBlockEntity::serverTick);
+                : createTickerHelper(blockEntityType, type.get(), AbstractMachineBlockEntity::serverTick);
     }
 
     @Override
@@ -93,8 +101,9 @@ public class CrystallizerBlock extends BaseEntityBlock {
         if (level.isClientSide()) {
             return InteractionResult.SUCCESS;
         }
-        if (level.getBlockEntity(pos) instanceof CrystallizerBlockEntity be) {
-            NetworkHooks.openScreen((net.minecraft.server.level.ServerPlayer) player, be, pos);
+        if (level.getBlockEntity(pos) instanceof AbstractMachineBlockEntity machine
+                && player instanceof ServerPlayer serverPlayer) {
+            NetworkHooks.openScreen(serverPlayer, machine, pos);
             return InteractionResult.CONSUME;
         }
         return InteractionResult.PASS;
@@ -103,8 +112,9 @@ public class CrystallizerBlock extends BaseEntityBlock {
     /** Spills the inventory when broken, as on 1.12.2. */
     @Override
     public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean moving) {
-        if (!state.is(newState.getBlock()) && level.getBlockEntity(pos) instanceof CrystallizerBlockEntity be) {
-            Containers.dropContents(level, pos, be);
+        if (!state.is(newState.getBlock())
+                && level.getBlockEntity(pos) instanceof AbstractMachineBlockEntity machine) {
+            Containers.dropContents(level, pos, machine);
         }
         super.onRemove(state, level, pos, newState, moving);
     }

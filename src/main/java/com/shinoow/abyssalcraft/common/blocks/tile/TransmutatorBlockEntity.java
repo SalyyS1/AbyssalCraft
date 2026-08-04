@@ -11,8 +11,8 @@
  ******************************************************************************/
 package com.shinoow.abyssalcraft.common.blocks.tile;
 
-import com.shinoow.abyssalcraft.api.recipe.CrystallizerRecipes;
-import com.shinoow.abyssalcraft.common.inventory.CrystallizerMenu;
+import com.shinoow.abyssalcraft.api.recipe.TransmutatorRecipes;
+import com.shinoow.abyssalcraft.common.inventory.TransmutatorMenu;
 import com.shinoow.abyssalcraft.init.ACBlockEntities;
 
 import net.minecraft.core.BlockPos;
@@ -23,22 +23,21 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 
 /**
- * The Crystallizer splits an input item into up to two crystal outputs.
+ * The Transmutator converts an input item into a single output.
  * <p>
- * Slots are carried over from 1.12.2: 0 input, 1 fuel, 2 and 3 outputs.
+ * Slots are carried over from 1.12.2: 0 input, 1 fuel, 2 output.
  */
-public class CrystallizerBlockEntity extends AbstractMachineBlockEntity {
+public class TransmutatorBlockEntity extends AbstractMachineBlockEntity {
 
-    private static final int SLOT_OUTPUT_SECONDARY = 3;
-    private static final int[] OUTPUT_SLOTS = {SLOT_OUTPUT, SLOT_OUTPUT_SECONDARY};
+    private static final int[] OUTPUT_SLOTS = {SLOT_OUTPUT};
 
-    public CrystallizerBlockEntity(BlockPos pos, BlockState state) {
-        super(ACBlockEntities.CRYSTALLIZER.get(), pos, state, 4);
+    public TransmutatorBlockEntity(BlockPos pos, BlockState state) {
+        super(ACBlockEntities.TRANSMUTATOR.get(), pos, state, 3);
     }
 
     @Override
     protected ItemStack[] resultsFor(ItemStack input) {
-        return CrystallizerRecipes.instance().getCrystallizationResult(input);
+        return new ItemStack[]{TransmutatorRecipes.instance().getTransmutationResult(input)};
     }
 
     @Override
@@ -48,11 +47,11 @@ public class CrystallizerBlockEntity extends AbstractMachineBlockEntity {
 
     @Override
     protected Component getDefaultName() {
-        return Component.translatable("container.abyssalcraft.crystallizer");
+        return Component.translatable("container.abyssalcraft.transmutator");
     }
 
     @Override
     protected AbstractContainerMenu createMenu(int id, Inventory inventory) {
-        return new CrystallizerMenu(id, inventory, this, getData());
+        return new TransmutatorMenu(id, inventory, this, getData());
     }
 }

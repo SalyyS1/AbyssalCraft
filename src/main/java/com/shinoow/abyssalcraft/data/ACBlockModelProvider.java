@@ -57,15 +57,17 @@ public class ACBlockModelProvider extends BlockStateProvider {
             simpleBlockItem(block, model);
         }
 
-        // The Crystallizer faces the player and shows a lit front when running, so it needs an
+        // The machines face the player and show a lit front when running, so each needs an
         // oriented model per state rather than a single cube.
-        crystallizer(ACBlocks.crystallizer_idle.get(), "crystallizer_front_off");
-        crystallizer(ACBlocks.crystallizer_active.get(), "crystallizer_front_on");
+        machine(ACBlocks.crystallizer_idle.get(), "crystallizer", "crystallizer_front_off");
+        machine(ACBlocks.crystallizer_active.get(), "crystallizer", "crystallizer_front_on");
+        machine(ACBlocks.transmutator_idle.get(), "transmutator", "transmutator_front_off");
+        machine(ACBlocks.transmutator_active.get(), "transmutator", "transmutator_front_on");
     }
 
-    private void crystallizer(Block block, String frontTexture) {
-        var model = models().orientable(name(block), texture("crystallizer_side"),
-                texture(frontTexture), texture("crystallizer_top"));
+    private void machine(Block block, String prefix, String frontTexture) {
+        var model = models().orientable(name(block), texture(prefix + "_side"),
+                texture(frontTexture), texture(prefix + "_top"));
         horizontalBlock(block, model);
         simpleBlockItem(block, model);
     }

@@ -12,6 +12,7 @@
 package com.shinoow.abyssalcraft.init;
 
 import com.shinoow.abyssalcraft.common.inventory.CrystallizerMenu;
+import com.shinoow.abyssalcraft.common.inventory.TransmutatorMenu;
 
 import net.minecraft.world.inventory.MenuType;
 import net.minecraftforge.common.extensions.IForgeMenuType;
@@ -31,6 +32,11 @@ public final class ACMenus {
             ACRegistries.MENUS.register("crystallizer",
                     () -> IForgeMenuType.create((IContainerFactory<CrystallizerMenu>)
                             (id, inventory, buffer) -> new CrystallizerMenu(id, inventory)));
+
+    public static final RegistryObject<MenuType<TransmutatorMenu>> TRANSMUTATOR =
+            ACRegistries.MENUS.register("transmutator",
+                    () -> IForgeMenuType.create((IContainerFactory<TransmutatorMenu>)
+                            (id, inventory, buffer) -> new TransmutatorMenu(id, inventory)));
 
     private ACMenus() {}
 

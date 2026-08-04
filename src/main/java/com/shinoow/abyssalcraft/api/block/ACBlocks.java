@@ -14,11 +14,14 @@ package com.shinoow.abyssalcraft.api.block;
 import java.util.function.Supplier;
 
 import com.shinoow.abyssalcraft.common.blocks.ACBlockProperties;
-import com.shinoow.abyssalcraft.common.blocks.CrystallizerBlock;
+import com.shinoow.abyssalcraft.common.blocks.MachineBlock;
 import com.shinoow.abyssalcraft.common.blocks.EnergyBlock;
+import com.shinoow.abyssalcraft.common.blocks.tile.CrystallizerBlockEntity;
 import com.shinoow.abyssalcraft.common.blocks.tile.EnergyCollectorBlockEntity;
 import com.shinoow.abyssalcraft.common.blocks.tile.EnergyContainerBlockEntity;
 import com.shinoow.abyssalcraft.common.blocks.tile.RitualAltarBlockEntity;
+import com.shinoow.abyssalcraft.common.blocks.tile.TransmutatorBlockEntity;
+import com.shinoow.abyssalcraft.init.ACBlockEntities;
 import com.shinoow.abyssalcraft.init.ACRegistries;
 
 import net.minecraft.world.item.BlockItem;
@@ -122,14 +125,21 @@ public class ACBlocks {
 
     // ---- Machines ----
     /**
-     * The Crystallizer keeps its 1.12.2 idle/active block split so recipes and JEI entries that
+     * The machines keep their 1.12.2 idle/active block split so recipes and JEI entries that
      * reference either form keep resolving.
      */
     public static final RegistryObject<Block> crystallizer_idle = register("crystallizer_idle",
-            () -> new CrystallizerBlock(ACBlockProperties.stone(3.5F, 6.0F, MapColor.COLOR_CYAN), false));
+            () -> new MachineBlock(ACBlockProperties.stone(3.5F, 6.0F, MapColor.COLOR_CYAN),
+                    CrystallizerBlockEntity::new, () -> ACBlockEntities.CRYSTALLIZER.get(), false));
     public static final RegistryObject<Block> crystallizer_active = register("crystallizer_active",
-            () -> new CrystallizerBlock(
-                    ACBlockProperties.glowingStone(3.5F, 6.0F, MapColor.COLOR_CYAN, 13), true));
+            () -> new MachineBlock(ACBlockProperties.glowingStone(3.5F, 6.0F, MapColor.COLOR_CYAN, 13),
+                    CrystallizerBlockEntity::new, () -> ACBlockEntities.CRYSTALLIZER.get(), true));
+    public static final RegistryObject<Block> transmutator_idle = register("transmutator_idle",
+            () -> new MachineBlock(ACBlockProperties.stone(3.5F, 6.0F, MapColor.COLOR_PURPLE),
+                    TransmutatorBlockEntity::new, () -> ACBlockEntities.TRANSMUTATOR.get(), false));
+    public static final RegistryObject<Block> transmutator_active = register("transmutator_active",
+            () -> new MachineBlock(ACBlockProperties.glowingStone(3.5F, 6.0F, MapColor.COLOR_PURPLE, 13),
+                    TransmutatorBlockEntity::new, () -> ACBlockEntities.TRANSMUTATOR.get(), true));
 
     // ---- Potential Energy ----
     public static final RegistryObject<Block> energy_collector = register("energy_collector",

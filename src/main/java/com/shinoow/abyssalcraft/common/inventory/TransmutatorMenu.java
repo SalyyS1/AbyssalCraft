@@ -11,7 +11,7 @@
  ******************************************************************************/
 package com.shinoow.abyssalcraft.common.inventory;
 
-import com.shinoow.abyssalcraft.api.recipe.CrystallizerRecipes;
+import com.shinoow.abyssalcraft.api.recipe.TransmutatorRecipes;
 import com.shinoow.abyssalcraft.init.ACMenus;
 
 import net.minecraft.world.Container;
@@ -22,31 +22,29 @@ import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 
-/** Menu for the Crystallizer: one input, one fuel, two outputs. */
-public class CrystallizerMenu extends AbstractMachineMenu {
+/** Menu for the Transmutator: one input, one fuel, one output. */
+public class TransmutatorMenu extends AbstractMachineMenu {
 
-    private static final int SLOT_OUTPUT_SECONDARY = 3;
-    private static final int MACHINE_SLOTS = 4;
+    private static final int MACHINE_SLOTS = 3;
 
     /** Client-side constructor; the menu type resolves the block entity by position. */
-    public CrystallizerMenu(int id, Inventory inventory) {
+    public TransmutatorMenu(int id, Inventory inventory) {
         this(id, inventory, new SimpleContainer(MACHINE_SLOTS), new SimpleContainerData(3));
     }
 
-    public CrystallizerMenu(int id, Inventory inventory, Container container, ContainerData data) {
-        super(ACMenus.CRYSTALLIZER.get(), id, inventory, container, data, MACHINE_SLOTS);
+    public TransmutatorMenu(int id, Inventory inventory, Container container, ContainerData data) {
+        super(ACMenus.TRANSMUTATOR.get(), id, inventory, container, data, MACHINE_SLOTS);
     }
 
     @Override
     protected void addMachineSlots(Container container) {
         addSlot(new Slot(container, SLOT_INPUT, 56, 17));
         addSlot(new FuelSlot(container, SLOT_FUEL, 56, 53));
-        addSlot(new OutputSlot(container, SLOT_OUTPUT, 116, 26));
-        addSlot(new OutputSlot(container, SLOT_OUTPUT_SECONDARY, 116, 44));
+        addSlot(new OutputSlot(container, SLOT_OUTPUT, 116, 35));
     }
 
     @Override
     protected boolean hasRecipeFor(ItemStack stack) {
-        return !CrystallizerRecipes.instance().getCrystallizationResult(stack)[0].isEmpty();
+        return !TransmutatorRecipes.instance().getTransmutationResult(stack).isEmpty();
     }
 }
