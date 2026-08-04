@@ -181,6 +181,14 @@ final class ACItemTextures {
         textures.put(ACItems.yog_sothoth_charm, "charm_yogsothoth");
         textures.put(ACItems.yog_sothoth_engraved_coin, "yogsothothcoin");
         textures.put(ACItems.yog_sothoth_engraving, "engraving_yogsothoth");
+        // Crystals and shards all share one greyscale sprite and are tinted per type at render
+        // time, exactly as on 1.12.2, so every type maps to the same texture.
+        ACItems.crystals.forEach(entry -> textures.put(entry, "crystal"));
+        ACItems.crystal_shards.forEach(entry -> textures.put(entry, "crystalshard"));
+
+        // The nugget was a metadata item on 1.12.2 with one sprite per metal; the abyssalnite one
+        // stands in until those variants are split into separate items.
+        textures.put(ACItems.ingot_nugget, "nugget_abyssalnite");
         return Map.copyOf(textures);
     }
 

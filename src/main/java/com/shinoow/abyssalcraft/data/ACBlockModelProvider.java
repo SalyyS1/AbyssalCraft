@@ -14,6 +14,7 @@ package com.shinoow.abyssalcraft.data;
 import java.util.Map;
 
 import com.shinoow.abyssalcraft.AbyssalCraft;
+import com.shinoow.abyssalcraft.api.block.ACBlocks;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
@@ -55,6 +56,18 @@ public class ACBlockModelProvider extends BlockStateProvider {
             }
             simpleBlockItem(block, model);
         }
+
+        // The Crystallizer faces the player and shows a lit front when running, so it needs an
+        // oriented model per state rather than a single cube.
+        crystallizer(ACBlocks.crystallizer_idle.get(), "crystallizer_front_off");
+        crystallizer(ACBlocks.crystallizer_active.get(), "crystallizer_front_on");
+    }
+
+    private void crystallizer(Block block, String frontTexture) {
+        var model = models().orientable(name(block), texture("crystallizer_side"),
+                texture(frontTexture), texture("crystallizer_top"));
+        horizontalBlock(block, model);
+        simpleBlockItem(block, model);
     }
 
     private static String name(Block block) {
