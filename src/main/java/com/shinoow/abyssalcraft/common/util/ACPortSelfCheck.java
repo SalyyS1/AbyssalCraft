@@ -21,7 +21,9 @@ import com.shinoow.abyssalcraft.api.item.ACItems;
 import com.shinoow.abyssalcraft.api.necronomicon.condition.ConditionProcessorRegistry;
 import com.shinoow.abyssalcraft.api.necronomicon.condition.DimensionCondition;
 import com.shinoow.abyssalcraft.api.necronomicon.condition.caps.NecroDataCapability;
+import com.shinoow.abyssalcraft.api.item.ItemEngraving;
 import com.shinoow.abyssalcraft.api.recipe.CrystallizerRecipes;
+import com.shinoow.abyssalcraft.api.recipe.EngraverRecipes;
 import com.shinoow.abyssalcraft.api.recipe.TransmutatorRecipes;
 import com.shinoow.abyssalcraft.api.ritual.NecronomiconRitual;
 import com.shinoow.abyssalcraft.api.ritual.RitualRegistry;
@@ -177,6 +179,26 @@ public final class ACPortSelfCheck {
             ItemStack[] resolved = CrystallizerRecipes.instance().getCrystallizationResult(input);
             if (!ItemStack.isSameItem(resolved[0], expected[0])) {
                 problems.add("crystallizer recipe for " + input.getItem() + " does not resolve to its own output");
+            }
+        }
+
+        for (Map.Entry<ItemEngraving, ItemStack> entry : EngraverRecipes.instance().getEngravings().entrySet()) {
+            checked++;
+            ItemEngraving stamp = entry.getKey();
+            ItemStack result = entry.getValue();
+            if (result.isEmpty()) {
+                problems.add("engraver recipe for " + stamp + " has an empty result");
+                continue;
+            }
+            // The Engraver is deliberately asymmetric: a deity stamp only works on a blank coin,
+            // and the blank stamp only works on an already-engraved one. So each recipe is checked
+            // against whichever coin it is actually meant to accept.
+            boolean strips = stamp == ACItems.blank_engraving.get();
+            ItemStack input = strips
+                    ? new ItemStack(ACItems.cthulhu_engraved_coin.get())
+                    : new ItemStack(ACItems.coin.get());
+            if (!ItemStack.isSameItem(EngraverRecipes.instance().getEngravingResult(input, stamp), result)) {
+                problems.add("engraver recipe for " + stamp + " does not accept the coin it should");
             }
         }
 

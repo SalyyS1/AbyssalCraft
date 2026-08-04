@@ -185,7 +185,7 @@ public class ACItems {
 
     // ---- Coins and engravings ----
     public static final RegistryObject<Item> coin = simple("coin");
-    public static final RegistryObject<Item> blank_engraving = simple("blank_engraving");
+    public static final RegistryObject<Item> blank_engraving = engraving("blank_engraving", 50);
     public static final RegistryObject<Item> cthulhu_engraved_coin = simple("cthulhu_engraved_coin");
     public static final RegistryObject<Item> elder_engraved_coin = simple("elder_engraved_coin");
     public static final RegistryObject<Item> jzahar_engraved_coin = simple("jzahar_engraved_coin");
@@ -194,14 +194,14 @@ public class ACItems {
     public static final RegistryObject<Item> nyarlathotep_engraved_coin = simple("nyarlathotep_engraved_coin");
     public static final RegistryObject<Item> yog_sothoth_engraved_coin = simple("yog_sothoth_engraved_coin");
     public static final RegistryObject<Item> shub_niggurath_engraved_coin = simple("shub_niggurath_engraved_coin");
-    public static final RegistryObject<Item> cthulhu_engraving = simple("cthulhu_engraving");
-    public static final RegistryObject<Item> elder_engraving = simple("elder_engraving");
-    public static final RegistryObject<Item> jzahar_engraving = simple("jzahar_engraving");
-    public static final RegistryObject<Item> hastur_engraving = simple("hastur_engraving");
-    public static final RegistryObject<Item> azathoth_engraving = simple("azathoth_engraving");
-    public static final RegistryObject<Item> nyarlathotep_engraving = simple("nyarlathotep_engraving");
-    public static final RegistryObject<Item> yog_sothoth_engraving = simple("yog_sothoth_engraving");
-    public static final RegistryObject<Item> shub_niggurath_engraving = simple("shub_niggurath_engraving");
+    public static final RegistryObject<Item> cthulhu_engraving = engraving("cthulhu_engraving", 10);
+    public static final RegistryObject<Item> elder_engraving = engraving("elder_engraving", 10);
+    public static final RegistryObject<Item> jzahar_engraving = engraving("jzahar_engraving", 10);
+    public static final RegistryObject<Item> hastur_engraving = engraving("hastur_engraving", 10);
+    public static final RegistryObject<Item> azathoth_engraving = engraving("azathoth_engraving", 10);
+    public static final RegistryObject<Item> nyarlathotep_engraving = engraving("nyarlathotep_engraving", 10);
+    public static final RegistryObject<Item> yog_sothoth_engraving = engraving("yog_sothoth_engraving", 10);
+    public static final RegistryObject<Item> shub_niggurath_engraving = engraving("shub_niggurath_engraving", 10);
 
     // ---- Ritual charms. Gate the deity rituals. ----
     public static final RegistryObject<Item> ritual_charm = simple("ritual_charm");
@@ -256,6 +256,11 @@ public class ACItems {
     /** Looks up a crystal shard by its 1.12.2 metadata index. */
     public static Item crystalShard(int type) {
         return crystal_shards.get(type).get();
+    }
+
+    /** Engraving stamps wear out; the blank one lasts 50 uses and the deity ones 10. */
+    private static RegistryObject<Item> engraving(String name, int durability) {
+        return ACRegistries.ITEMS.register(name, () -> new ItemEngraving(durability));
     }
 
     private static RegistryObject<Item> simple(String name) {

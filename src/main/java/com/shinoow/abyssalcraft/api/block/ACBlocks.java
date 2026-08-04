@@ -14,6 +14,7 @@ package com.shinoow.abyssalcraft.api.block;
 import java.util.function.Supplier;
 
 import com.shinoow.abyssalcraft.common.blocks.ACBlockProperties;
+import com.shinoow.abyssalcraft.common.blocks.EngraverBlock;
 import com.shinoow.abyssalcraft.common.blocks.MachineBlock;
 import com.shinoow.abyssalcraft.common.blocks.EnergyBlock;
 import com.shinoow.abyssalcraft.common.blocks.tile.CrystallizerBlockEntity;
@@ -140,6 +141,10 @@ public class ACBlocks {
     public static final RegistryObject<Block> transmutator_active = register("transmutator_active",
             () -> new MachineBlock(ACBlockProperties.glowingStone(3.5F, 6.0F, MapColor.COLOR_PURPLE, 13),
                     TransmutatorBlockEntity::new, () -> ACBlockEntities.TRANSMUTATOR.get(), true));
+
+    /** The Engraver has no lit variant: it stamps coins rather than burning fuel. */
+    public static final RegistryObject<Block> engraver = register("engraver",
+            () -> new EngraverBlock(ACBlockProperties.stone(3.5F, 6.0F, MapColor.COLOR_GRAY)));
 
     // ---- Potential Energy ----
     public static final RegistryObject<Block> energy_collector = register("energy_collector",

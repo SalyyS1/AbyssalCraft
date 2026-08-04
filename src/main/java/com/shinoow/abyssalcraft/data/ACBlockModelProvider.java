@@ -69,6 +69,16 @@ public class ACBlockModelProvider extends BlockStateProvider {
         machine(ACBlocks.crystallizer_active.get(), "crystallizer", "crystallizer_front_on");
         machine(ACBlocks.transmutator_idle.get(), "transmutator", "transmutator_front_off");
         machine(ACBlocks.transmutator_active.get(), "transmutator", "transmutator_front_on");
+
+        // The Engraver shipped an OBJ model on 1.12.2, which needs Forge's OBJ loader; until that
+        // is wired up it renders as a cube using the same texture that OBJ referenced.
+        // It carries FACING like the other machines, so it needs a variant per direction; a
+        // single-variant blockstate would leave the placed block with no model.
+        Block engraver = ACBlocks.engraver.get();
+        var engraverModel = models().cubeAll(name(engraver),
+                new ResourceLocation(AbyssalCraft.MOD_ID, "model/blocks/engraver"));
+        horizontalBlock(engraver, engraverModel);
+        simpleBlockItem(engraver, engraverModel);
     }
 
     private void machine(Block block, String prefix, String frontTexture) {

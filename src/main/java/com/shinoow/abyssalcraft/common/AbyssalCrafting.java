@@ -13,13 +13,17 @@ package com.shinoow.abyssalcraft.common;
 
 import com.shinoow.abyssalcraft.api.block.ACBlocks;
 import com.shinoow.abyssalcraft.api.item.ACItems;
+import com.shinoow.abyssalcraft.api.item.ItemEngraving;
 import com.shinoow.abyssalcraft.api.recipe.CrystallizerRecipes;
+import com.shinoow.abyssalcraft.api.recipe.EngraverRecipes;
 import com.shinoow.abyssalcraft.api.recipe.TransmutatorRecipes;
 import com.shinoow.abyssalcraft.lib.ACConfig;
 
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraftforge.registries.RegistryObject;
 
 /**
  * Machine recipe registration.
@@ -40,6 +44,40 @@ public final class AbyssalCrafting {
     public static void init() {
         addCrystallization();
         addTransmutation();
+        addEngravings();
+    }
+
+    /**
+     * The Engraver stamps a blank coin with a deity engraving, or strips an engraved coin back to
+     * blank. Both directions come from the same table: the blank engraving maps to the plain coin.
+     */
+    private static void addEngravings() {
+        EngraverRecipes recipes = EngraverRecipes.instance();
+
+        recipes.addCoin(ACItems.coin.get());
+        recipes.addCoin(ACItems.cthulhu_engraved_coin.get());
+        recipes.addCoin(ACItems.elder_engraved_coin.get());
+        recipes.addCoin(ACItems.jzahar_engraved_coin.get());
+        recipes.addCoin(ACItems.hastur_engraved_coin.get());
+        recipes.addCoin(ACItems.azathoth_engraved_coin.get());
+        recipes.addCoin(ACItems.nyarlathotep_engraved_coin.get());
+        recipes.addCoin(ACItems.yog_sothoth_engraved_coin.get());
+        recipes.addCoin(ACItems.shub_niggurath_engraved_coin.get());
+
+        engraving(ACItems.coin, ACItems.blank_engraving, 0.0F);
+        engraving(ACItems.cthulhu_engraved_coin, ACItems.cthulhu_engraving, 0.5F);
+        engraving(ACItems.elder_engraved_coin, ACItems.elder_engraving, 0.5F);
+        engraving(ACItems.jzahar_engraved_coin, ACItems.jzahar_engraving, 0.5F);
+        engraving(ACItems.hastur_engraved_coin, ACItems.hastur_engraving, 0.5F);
+        engraving(ACItems.azathoth_engraved_coin, ACItems.azathoth_engraving, 0.5F);
+        engraving(ACItems.nyarlathotep_engraved_coin, ACItems.nyarlathotep_engraving, 0.5F);
+        engraving(ACItems.yog_sothoth_engraved_coin, ACItems.yog_sothoth_engraving, 0.5F);
+        engraving(ACItems.shub_niggurath_engraved_coin, ACItems.shub_niggurath_engraving, 0.5F);
+    }
+
+    private static void engraving(RegistryObject<Item> coin, RegistryObject<Item> stamp, float xp) {
+        EngraverRecipes.instance().addEngraving(new ItemStack(coin.get()),
+                (ItemEngraving) stamp.get(), xp);
     }
 
     private static void addCrystallization() {
