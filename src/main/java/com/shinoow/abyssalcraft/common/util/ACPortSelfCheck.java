@@ -18,6 +18,9 @@ import java.util.Map;
 
 import com.shinoow.abyssalcraft.api.block.ACBlocks;
 import com.shinoow.abyssalcraft.api.item.ACItems;
+import com.shinoow.abyssalcraft.api.necronomicon.condition.ConditionProcessorRegistry;
+import com.shinoow.abyssalcraft.api.necronomicon.condition.DimensionCondition;
+import com.shinoow.abyssalcraft.api.necronomicon.condition.caps.NecroDataCapability;
 import com.shinoow.abyssalcraft.api.recipe.CrystallizerRecipes;
 import com.shinoow.abyssalcraft.api.recipe.TransmutatorRecipes;
 import com.shinoow.abyssalcraft.common.blocks.tile.EnergyContainerBlockEntity;
@@ -25,6 +28,7 @@ import com.shinoow.abyssalcraft.init.ACEntities;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -54,9 +58,10 @@ public final class ACPortSelfCheck {
         int recipes = checkMachineRecipes(problems);
         int entities = checkEntities(event, problems);
         checkEnergyStorage(problems);
+        checkKnowledgeGating(problems);
 
         if (problems.isEmpty()) {
-            ACLogger.info("Port self-check: {} blocks, {} items, {} machine recipes and {} entities resolved; PE storage OK.",
+            ACLogger.info("Port self-check: {} blocks, {} items, {} machine recipes and {} entities resolved; PE storage and Necronomicon gating OK.",
                     blocks, items, recipes, entities);
         } else {
             ACLogger.severe("Port self-check: {} problems across {} blocks, {} items, {} recipes and {} entities:",
@@ -178,6 +183,44 @@ public final class ACPortSelfCheck {
         }
         if (container.getContainedEnergy() != 0.0F) {
             problems.add("PE container did not empty, holds " + container.getContainedEnergy());
+        }
+    }
+
+    /**
+     * Exercises the Necronomicon gating end to end: a condition must stay locked until its trigger
+     * fires, must survive a save/load round trip, and the unlock-all cheat must override it. This
+     * is the progression spine of the mod, so a condition that silently reads as always-unlocked
+     * would hand the player the whole book.
+     */
+    private static void checkKnowledgeGating(List<String> problems) {
+        NecroDataCapability progress = new NecroDataCapability();
+        ResourceLocation dimension = new ResourceLocation("abyssalcraft", "the_abyssal_wasteland");
+        DimensionCondition condition = new DimensionCondition(dimension);
+
+        if (progress.isUnlocked(condition, null)) {
+            problems.add("Necronomicon: dimension knowledge is unlocked before its trigger fired");
+        }
+
+        progress.triggerDimensionUnlock(dimension);
+        if (!progress.isUnlocked(condition, null)) {
+            problems.add("Necronomicon: dimension knowledge stayed locked after its trigger fired");
+        }
+
+        NecroDataCapability reloaded = new NecroDataCapability();
+        reloaded.deserializeNBT(progress.serializeNBT());
+        if (!reloaded.isUnlocked(condition, null)) {
+            problems.add("Necronomicon: progress did not survive a save/load round trip");
+        }
+
+        NecroDataCapability cheated = new NecroDataCapability();
+        cheated.unlockAllKnowledge(true);
+        if (!cheated.isUnlocked(condition, null)) {
+            problems.add("Necronomicon: unlock-all did not override an unmet condition");
+        }
+
+        if (ConditionProcessorRegistry.instance().getProcessorCount() != 7) {
+            problems.add("Necronomicon: expected 7 condition processors, found "
+                    + ConditionProcessorRegistry.instance().getProcessorCount());
         }
     }
 

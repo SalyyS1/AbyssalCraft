@@ -13,6 +13,7 @@ package com.shinoow.abyssalcraft;
 
 import com.shinoow.abyssalcraft.api.block.ACBlocks;
 import com.shinoow.abyssalcraft.api.item.ACItems;
+import com.shinoow.abyssalcraft.api.necronomicon.condition.ACConditionProcessors;
 import com.shinoow.abyssalcraft.common.AbyssalCrafting;
 import com.shinoow.abyssalcraft.common.util.ACPortSelfCheck;
 import com.shinoow.abyssalcraft.init.ACBlockEntities;
@@ -67,6 +68,7 @@ public class AbyssalCraft {
      */
     private void commonSetup(FMLCommonSetupEvent event) {
         event.enqueueWork(AbyssalCrafting::init);
+        event.enqueueWork(ACConditionProcessors::register);
     }
 
     /** Replaces the 1.12.2 {@code @SidedProxy} split. */
